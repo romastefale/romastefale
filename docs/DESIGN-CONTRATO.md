@@ -286,7 +286,7 @@ O Início do site é o dossiê PINTESTER, que usa o mesmo vidro, o mesmo menu e 
 | D20 a D23 | Só modo escuro: `<html data-theme-lock="dark">`, sem botão de tema (`hideTheme`). Veja T14 a T16 em [TELA-CHEIA-E-BARRAS.md](TELA-CHEIA-E-BARRAS.md) | Pedido de design |
 | D27 | Quatro idiomas (mandarim, cantonês de Hong Kong, inglês e português), mandarim primeiro. Todo texto e todo rótulo vêm de `COPY` em `src/lib/pintester-i18n.ts`, e `<html lang>`, o título da aba e a descrição acompanham o idioma | Pedido de design |
 | D4 | A pílula de seleção do seletor de idioma usa a tinta vermelha da página (`rgba(255,0,51,.26)`), sem sombra e sem linha, no peso 600 | Cor da página; a forma segue a regra |
-| D12 | O menu lista as seções do dossiê (Root, Visão, Arsenal, Anexo A, EOF) | Seções da página |
+| D12 | O menu lista as seções do dossiê (Root, Perspectiva, Arsenal, Anexo A, EOF) | Seções da página |
 | D24 | As fotos de perfil (GitHub, Telegram e a imagem do NFT do domínio) são do próprio dono e baixadas no build por `scripts/fetch-avatars.mjs`; não ficam no repositório | Fotos do dono |
 
-O texto original do dossiê fica no corpo da página; o texto de revisão entra só como anexo (`annexes` em `pintester-i18n.ts`), no fim.
+O corpo da página traz o conteúdo original do dossiê, em redação impessoal e de registro técnico nos quatro idiomas (as alegações aparecem como relatadas, não como fatos); o texto de revisão entra só como anexo (`annexes` em `pintester-i18n.ts`), no fim.

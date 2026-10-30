@@ -20,7 +20,7 @@ export interface Skyline {
   over?: "top";
 }
 
-const REPO = "https://github.com/romastefale/HTML/blob/main/";
+const REPO = "https://github.com/romastefale/romastefale/blob/main/";
 // A 16:9 photo drawn at the reading column's width (≤ 880px − gutters) or,
 // on phones, cover-cropped to a taller box: ~1.4× the width.
 const HERO_SIZES = "(max-width: 700px) calc(140vw - 56px), 880px";

@@ -5,7 +5,7 @@ import { docsPlugin } from "./scripts/vite-docs.ts";
 
 // Same toolchain as the liquid-glass fork's own demo site (site/vite.config.ts):
 // Vite + @vitejs/plugin-react, React 19, TypeScript. One HTML entry per page of
-// the portal (src/lib/pages.ts): /HTML/ (index.html), the sample
+// the portal (src/lib/pages.ts): /romastefale/ (index.html), the sample
 // (liquid-glass-sample.html), the three example pages (painel.html,
 // galeria.html, fundo-animado.html) and the two contract pages (contrato-design.html,
 // contrato-arquitetura.html), which render docs/*.md compiled at build time
@@ -13,8 +13,8 @@ import { docsPlugin } from "./scripts/vite-docs.ts";
 const entry = (file: string) => fileURLToPath(new URL(file, import.meta.url));
 
 export default defineConfig({
-  // GitHub Pages project site: https://romastefale.github.io/HTML/
-  base: "/HTML/",
+  // GitHub Pages project site: https://romastefale.github.io/romastefale/
+  base: "/romastefale/",
   plugins: [react(), docsPlugin()],
   resolve: { dedupe: ["react", "react-dom"] },
   build: {

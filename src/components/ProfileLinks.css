@@ -14,3 +14,12 @@
 }
 .pl-card:active{transform:scale(.985)}
 @media (prefers-reduced-motion:reduce){.pl-card{transition:none}.pl-card:hover{transform:none}}
+
+/* Phones: three compact tiles in one row, photo above the name. */
+@media (max-width:540px){
+  .pl{grid-template-columns:repeat(3,1fr);gap:8px}
+  .pl-link{flex-direction:column;text-align:center;gap:8px;padding:14px 4px 12px}
+  .pl-text{align-items:center;width:100%}
+  .pl-text strong{font-size:13px}
+  .pl-text span{font-size:10px;max-width:100%}
+}

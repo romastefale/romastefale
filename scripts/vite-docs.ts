@@ -34,7 +34,7 @@ export const DOC_PAGES: Record<string, { page: string; prefix: string }> = {
   "CHECKLIST-VERIFICACAO.md": { page: "contrato-arquitetura.html", prefix: "checklist" },
   "HISTORICO.md": { page: "contrato-arquitetura.html", prefix: "historico" },
 };
-const REPO_BLOB = "https://github.com/romastefale/HTML/blob/main/";
+const REPO_BLOB = "https://github.com/romastefale/romastefale/blob/main/";
 const SUFFIX = "?doc";
 
 const esc = (s: string) =>

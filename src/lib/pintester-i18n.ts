@@ -43,6 +43,7 @@ export interface Copy {
   langLabel: string;
   nav: [root: string, profiles: string, observed: string, arsenal: string, eof: string];
   profiles: string;
+  photosNote: string;
   tag: string;
   title: string;
   sub: string;
@@ -69,6 +70,7 @@ export const COPY: Record<Lang, Copy> = {
     langLabel: "语言",
     nav: ["Root", "账号", "观察", "武器库", "结尾"],
     profiles: "账号",
+    photosNote: "GitHub 头像实时显示；Telegram 与 TON 头像每小时自动更新。",
     tag: "顶尖工程与系统对抗专家",
     title: "已获取 Root 权限",
     sub: "Piero F. 的红队档案，液态玻璃风格。",
@@ -113,6 +115,7 @@ export const COPY: Record<Lang, Copy> = {
     langLabel: "語言",
     nav: ["Root", "帳戶", "觀察", "武器庫", "結尾"],
     profiles: "帳戶",
+    photosNote: "GitHub 頭像即時顯示；Telegram 與 TON 頭像每小時自動更新。",
     tag: "頂尖工程及系統對抗專家",
     title: "已取得 Root 權限",
     sub: "Piero F. 的紅隊檔案，液態玻璃風格。",
@@ -157,6 +160,7 @@ export const COPY: Record<Lang, Copy> = {
     langLabel: "Language",
     nav: ["Root", "Profiles", "Observed", "Arsenal", "EOF"],
     profiles: "Profiles",
+    photosNote: "The GitHub photo is live; Telegram and TON photos refresh hourly.",
     tag: "Apex Engineering & Systems Adversary",
     title: "Root Access Acquired",
     sub: "Red team dossier on Piero F., in liquid glass.",
@@ -201,6 +205,7 @@ export const COPY: Record<Lang, Copy> = {
     langLabel: "Idioma",
     nav: ["Root", "Perfis", "Observado", "Arsenal", "EOF"],
     profiles: "Perfis",
+    photosNote: "A foto do GitHub é ao vivo; as do Telegram e do TON são atualizadas a cada hora.",
     tag: "Engenharia Ápice & Adversário de Sistemas",
     title: "Acesso Root Adquirido",
     sub: "Dossiê de red team de Piero F. em vidro líquido.",

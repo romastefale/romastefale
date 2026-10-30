@@ -38,11 +38,19 @@ const Moon = () => (
 
 const EDGE = 12;
 
-export const SiteHeader: React.FC<{ items: NavItem[]; current: PageKey; label?: string; searchScope?: string }> = ({
+export const SiteHeader: React.FC<{
+  items: NavItem[];
+  current: PageKey;
+  label?: string;
+  searchScope?: string;
+  /** Pages with a single fixed theme (PINTESTER is dark only) drop the toggle and its slot. */
+  hideTheme?: boolean;
+}> = ({
   items,
   current,
   label = "Seções desta página",
   searchScope = "conteudo",
+  hideTheme = false,
 }) => {
   const { theme, toggle } = useTheme();
   const dark = theme === "dark";
@@ -342,28 +350,30 @@ export const SiteHeader: React.FC<{ items: NavItem[]; current: PageKey; label?: 
           </nav>
           <PageSearch open={searchOpen} id={searchId} scopeId={searchScope} inputRef={searchInput} onClose={closeSearch} />
           <div className="sh-actions">
-            <span className="sh-slot" />
+            {!hideTheme && <span className="sh-slot" />}
             <span className="sh-slot" />
           </div>
         </header>
       </Frost>
-      <Frost
-        className="sh-glass sh-glass-theme"
-        optics={FROST}
-        data-hidden={searchOpen || undefined}
-      >
-        <button
-          ref={themeBtn}
-          type="button"
-          className="sh-btn"
-          onClick={toggle}
-          aria-label={dark ? "Ativar modo claro" : "Ativar modo escuro"}
-          title="Alternar modo claro / escuro"
-          inert={searchOpen}
+      {!hideTheme && (
+        <Frost
+          className="sh-glass sh-glass-theme"
+          optics={FROST}
+          data-hidden={searchOpen || undefined}
         >
-          {dark ? <Sun /> : <Moon />}
-        </button>
-      </Frost>
+          <button
+            ref={themeBtn}
+            type="button"
+            className="sh-btn"
+            onClick={toggle}
+            aria-label={dark ? "Ativar modo claro" : "Ativar modo escuro"}
+            title="Alternar modo claro / escuro"
+            inert={searchOpen}
+          >
+            {dark ? <Sun /> : <Moon />}
+          </button>
+        </Frost>
+      )}
       <Frost className="sh-glass sh-glass-search" optics={FROST}>
         <button
           ref={searchBtn}

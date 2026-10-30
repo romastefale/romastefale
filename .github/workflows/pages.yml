@@ -4,6 +4,9 @@ name: Deploy GitHub Pages
 on:
   push:
     branches: [main]
+  # Hourly rebuild: refreshes the Telegram and TON profile photos (scripts/fetch-avatars.mjs).
+  schedule:
+    - cron: "17 * * * *"
   workflow_dispatch:
 permissions:
   contents: read
@@ -23,6 +26,8 @@ jobs:
           node-version: 22
           cache: pnpm
       - run: pnpm install --frozen-lockfile
+      - name: Fetch profile photos
+        run: node scripts/fetch-avatars.mjs # never fails the build; the page falls back to initials
       - run: pnpm build # tsc --noEmit + vite build → dist/
       - name: Check Pages source
         env:

@@ -1,0 +1,78 @@
+/* PINTESTER on glass: black + #ff0033, JetBrains Mono, scanlines, glitch.
+   The page is always dark. These overrides beat both :root[data-theme] blocks
+   (specificity 0,2,1 vs 0,2,0), so the shared theme toggle cannot turn it light. */
+html[data-page="pintester"][data-theme]{
+  --page-edge:#07060a;
+  --page-bg:none;
+  --text:#f3f4f6;
+  --text-dim:#c4c6d0;
+  --faint:#9a9ca8;
+  --link:#ff4d6d;
+  --focus:rgba(255,255,255,.75);
+  --red:#ff0033;
+  --vidro-tint:rgba(20,14,20,.42);
+  --glass-float:0 12px 34px rgba(0,0,0,.5),0 2px 6px rgba(0,0,0,.35);
+}
+html[data-page="pintester"] body{font-family:"JetBrains Mono Variable",ui-monospace,Menlo,Consolas,monospace}
+/* JetBrains Mono has no CJK glyphs: pick each script's native UI face by language. */
+html[data-page="pintester"]:lang(zh-Hans) body{font-family:"JetBrains Mono Variable","PingFang SC","Noto Sans CJK SC","Source Han Sans SC","Microsoft YaHei",ui-monospace,sans-serif}
+html[data-page="pintester"]:lang(zh-HK) body{font-family:"JetBrains Mono Variable","PingFang HK","Noto Sans CJK HK","Source Han Sans HK","Microsoft JhengHei",ui-monospace,sans-serif}
+html[data-page="pintester"]:lang(zh-Hans) :is(.pt-obs span,.pt-card p,.pt-limits p,.pt-note,.pt-sub),
+html[data-page="pintester"]:lang(zh-HK) :is(.pt-obs span,.pt-card p,.pt-limits p,.pt-note,.pt-sub){line-height:1.75}
+html[data-page="pintester"] ::selection{background:var(--red);color:#fff}
+
+/* Own column layout (the home's .feed lives in Home.css, which this page does not load). */
+.pt{
+  padding:calc(84px + env(safe-area-inset-top, 0px)) max(18px, env(safe-area-inset-right, 0px)) calc(28px + env(safe-area-inset-bottom, 0px)) max(18px, env(safe-area-inset-left, 0px));
+  display:flex;flex-direction:column;gap:16px;
+}
+.pt > *{width:100%;max-width:564px;margin-left:auto;margin-right:auto}
+.card-glass{border-radius:22px}
+
+/* red blobs drifting behind the glass */
+.pt-bg{position:fixed;inset:0;z-index:-1;overflow:hidden;pointer-events:none}
+.pt-bg i{position:absolute;border-radius:50%;filter:blur(44px);opacity:.7;animation:pt-drift 20s ease-in-out infinite alternate}
+.pt-bg i:nth-child(1){width:48vmax;height:48vmax;left:-14vmax;top:-10vmax;background:radial-gradient(circle,#ff0033 0%,transparent 68%)}
+.pt-bg i:nth-child(2){width:40vmax;height:40vmax;right:-12vmax;top:32vh;background:radial-gradient(circle,#7a0a24 0%,transparent 68%);animation-duration:25s}
+.pt-bg i:nth-child(3){width:32vmax;height:32vmax;left:18vw;bottom:-14vmax;background:radial-gradient(circle,#ff4d6d 0%,transparent 70%);opacity:.4;animation-duration:29s}
+@keyframes pt-drift{to{transform:translate(8vmax,6vmax) scale(1.15)}}
+.pt-scan{position:fixed;inset:0;z-index:40;pointer-events:none;background:linear-gradient(rgba(0,0,0,0) 50%,rgba(0,0,0,.2) 50%);background-size:100% 3px}
+
+.pt-hero{padding:34px 22px;text-align:center}
+.pt-tag{margin:0 0 14px;color:var(--red);font-size:11px;font-weight:800;letter-spacing:.26em;text-transform:uppercase}
+.pt-tag::before,.pt-sec h2::before{content:"> "}
+.pt-glitch{margin:0 0 14px;font-size:clamp(30px,8.4vw,48px);line-height:1.04;letter-spacing:-.04em;text-transform:uppercase;font-weight:800;text-wrap:balance}
+.pt-sub{margin:0;font-size:13px;color:var(--faint)}
+@media (hover:hover){
+  .pt-glitch:hover{text-shadow:2px 0 var(--red),-2px 0 #0ff;animation:pt-glitch .22s linear infinite}
+}
+@keyframes pt-glitch{20%{transform:translate(-2px,1px)}40%{transform:translate(-1px,-1px)}60%{transform:translate(2px,1px)}80%{transform:translate(1px,-1px)}}
+
+.pt-sec{padding:22px 20px}
+.pt-sec h2{margin:0 0 14px;padding-bottom:10px;font-size:12px;letter-spacing:.24em;text-transform:uppercase;color:var(--red);border-bottom:1px solid rgba(255,0,51,.35)}
+.pt-note{margin:0 0 14px;font-size:12px;line-height:1.5;color:var(--faint)}
+.pt-obs{list-style:none;margin:0 0 14px;padding:0;display:grid;gap:12px}
+.pt-obs li{display:flex;flex-direction:column;gap:2px;padding-left:14px;border-left:2px solid rgba(255,0,51,.6)}
+.pt-obs strong{font-size:14px}
+.pt-obs span{font-size:12.5px;line-height:1.55;color:var(--text-dim)}
+.pt-limits{padding:14px 16px;border-radius:16px;background:rgba(255,0,51,.1);box-shadow:inset 0 0 0 1px rgba(255,0,51,.4)}
+.pt-limits h3{margin:0 0 6px;font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:var(--red)}
+.pt-limits p{margin:0;font-size:12.5px;line-height:1.55;color:var(--text-dim)}
+
+.pt-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px}
+.pt-card{padding:14px 16px;border-radius:16px;background:rgba(255,255,255,.05);box-shadow:inset 0 0 0 1px rgba(255,255,255,.1);transition:box-shadow .25s,background .25s}
+.pt-card h3{margin:0 0 6px;font-size:14px}
+.pt-card p{margin:0;font-size:12px;line-height:1.55;color:var(--text-dim)}
+@media (hover:hover){.pt-card:hover{background:rgba(70,10,26,.5);box-shadow:inset 0 0 22px rgba(255,0,51,.16),inset 0 0 0 1px var(--red)}}
+
+.pt-end{text-align:center}
+.pt-big{margin:0 0 8px;font-size:clamp(17px,4.6vw,22px);font-weight:800;text-transform:uppercase;letter-spacing:-.02em;line-height:1.3;text-wrap:balance}
+.pt-eof{margin:18px 0 0;color:var(--red);font-size:11px;font-weight:800;letter-spacing:.3em}
+
+@media (prefers-reduced-motion:reduce){
+  .pt-bg i,.pt-glitch:hover{animation:none}
+  .pt-card{transition:none}
+}
+@media (prefers-reduced-transparency:reduce){
+  html[data-page="pintester"][data-theme]{--vidro-tint:rgba(24,16,24,.96)}
+}

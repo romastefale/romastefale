@@ -21,6 +21,7 @@ export default defineConfig({
     rollupOptions: {
       input: {
         index: entry("./index.html"),
+        pintester: entry("./pintester.html"),
         sample: entry("./liquid-glass-sample.html"),
         painel: entry("./painel.html"),
         galeria: entry("./galeria.html"),

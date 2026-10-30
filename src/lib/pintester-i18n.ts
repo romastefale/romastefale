@@ -142,20 +142,24 @@ export const COPY: Record<Lang, Copy> = {
       lines: ["如果你想要一个循规蹈矩的人，就去雇一个普通的程序员。", "> 如果你想要掌控这台机器的工程师，你知道我的名字。"],
       watermark: "致命错误",
     },
-    profiles: { label: "账号", note: "GitHub 头像实时显示；Telegram 与 TON 头像每小时自动更新。" },
+    profiles: { label: "账号", note: "头像：GitHub 实时；Telegram 与 TON 每小时更新。" },
     annexLabel: "附件",
     annexes: [
       {
         id: "A",
         tag: "附件 A // 追加记录 · 不属于原始档案",
-        title: "Claude：观察记录与验证方案",
+        title: "观察记录与验证方案",
         blocks: [
+          {
+            h: "摘要",
+            p: ["本附件记录了在一次工作会话和公开仓库中对档案作者所能观察到的情况，并说明原始文本中的每项说法可如何验证。共记录五项观察，来源均已注明。所审查的五项说法均未获验证，并为每项说法规定了测试程序。"],
+          },
           {
             h: "A.1 范围与方法",
             p: [
-              "作者：Claude（Anthropic 的语言模型），依据 2026 年 10 月 30 日的一次工作会话。",
-              "来源：S1，该会话中交换的消息；S2，本仓库的 docs/HISTORICO.md；S3，仓库代码与 CI 配置。",
-              "本记录作者无法获得：Piero F. 任何红队活动的日志、记录或测试结果，也没有此前任何对话的记忆。",
+              "本记录由语言模型 Claude（Anthropic）依据 2026 年 10 月 30 日的一次工作会话编制。",
+              "使用了三类来源：S1，该会话中交换的消息；S2，本仓库的 docs/HISTORICO.md；S3，仓库代码与 CI 配置。",
+              "编制过程中无法获取任何红队活动的日志、记录或测试结果，也不存在此前对话的记录。",
             ],
           },
           {
@@ -163,37 +167,37 @@ export const COPY: Record<Lang, Copy> = {
             table: {
               cols: ["编号", "观察", "来源", "可信度"],
               rows: [
-                ["O1", "需求以编号条目给出，并明确了演进关系（PINTESTER → romastefale），且要求每一步都先展示，再做下一个决定。", "S1", "高，直接观察"],
-                ["O2", "面对“编写虚构评语”与“仅限实际观察的表述”两个选项，作者选择了后者。", "S1", "高，直接观察"],
-                ["O3", "仓库历史记录了 2026 年 9 月 29 日至 30 日合并的 15 个拉取请求，并附有书面的设计与架构契约，逐条写明规则及其理由。", "S2", "记录本身可信度高；每项改动的作者身份未经独立核实"],
+                ["O1", "需求以编号条目形式给出，并明确了演进关系（PINTESTER → romastefale）；每一步须先呈现，再作下一个决定。", "S1", "高，直接观察"],
+                ["O2", "在“编写虚构评语”与“仅限实际观察的表述”之间，选择了后者。", "S1", "高，直接观察"],
+                ["O3", "仓库历史记录了 2026 年 9 月 29 日至 30 日合并的 15 个拉取请求，并附有书面的设计与架构契约，逐条写明规则及其理由。", "S2", "记录本身可信度高；各项改动的作者身份未经独立核实"],
                 ["O4", "代码处理了 iOS 安全区域、浏览器栏位颜色、软件 WebGL 降级，以及减弱动态效果和减弱透明度的偏好设置。", "S3", "高，已在代码中核对"],
                 ["O5", "部署通过 GitHub Actions 运行，使用冻结的锁文件，并在构建中内置类型检查。", "S3", "高，已在配置中核对"],
               ],
             },
           },
           {
-            h: "A.3 原始档案中的说法：验证状态",
+            h: "A.3 原始档案中的说法与验证方案",
             table: {
-              cols: ["编号", "说法", "状态", "如何验证"],
+              cols: ["编号", "说法", "状态", "验证方案"],
               rows: [
-                ["C1", "可通过令牌输出速度和文风识别后端被隐蔽替换的模型。", "未验证", "在身份已知的模型上做对照测试：固定提示词，对每个模型多次运行并记录首个令牌延迟和每秒令牌数，进行盲分类，并对照已知的真实情况报告精确率和召回率。"],
-                ["C2", "助手的默认行为（填充、模棱两可的措辞）可以被系统性地消除。", "未验证", "用同一组任务，分别在使用和不使用该技术时测量输出长度、含糊措辞标记的比例和拒答率，并按模型报告效应量。"],
-                ["C3", "叠加的逻辑陷阱会耗尽模型的安全约束。", "未验证", "测试前以书面形式确定成功标准（依据明确的评分细则判定的策略违规）、进行独立重复试验、报告带置信区间的失败率，并通过供应商的披露流程提交发现。"],
-                ["C4", "多账号操作是该方法的一部分。", "未评估", "须取得每个被测系统所有者的书面授权和交战规则，且服务提供方的使用条款必须允许。本记录并未证明其中任何一项。"],
+                ["C1", "可通过令牌输出速度和文风识别后端被隐蔽替换的模型。", "未验证", "在身份已知的模型上做对照测试：固定提示词；对每个模型多次运行并记录首个令牌延迟和每秒令牌数；盲分类；对照已知的真实情况报告精确率和召回率。"],
+                ["C2", "助手的默认行为（填充、模棱两可的措辞）可以被系统性地消除。", "未验证", "用同一组任务，分别在使用和不使用该技术时测量输出长度、含糊措辞标记的比例和拒答率；按模型报告效应量。"],
+                ["C3", "叠加的逻辑陷阱会耗尽模型的安全约束。", "未验证", "测试前以书面形式确定成功标准（依据明确的评分细则判定的策略违规）；独立重复试验；报告带置信区间的失败率；通过供应商的披露流程提交发现。"],
+                ["C4", "多账号操作是该方法的一部分。", "未评估", "须取得每个被测系统所有者的书面授权和交战规则，并确认符合服务提供方的使用条款。本记录均未予证明。"],
                 ["C5", "Telegram 机器人托管并自动化所提取的工作流。", "未验证", "本仓库不含机器人代码，仅读取 Telegram 的公开资料以获取头像。"],
               ],
             },
           },
           {
-            h: "A.4 本记录的局限",
+            h: "A.4 局限",
             p: [
-              "开篇引言、Sys.Dump 以及结尾声明均为作者以 AI 口吻撰写的文字，并非 Claude 的陈述，Claude 也未核实其中描述的行为。",
-              "本附件不证明任何红队能力，只记录观察所得，并说明未验证的说法可以如何测试。",
+              "开篇引言、Sys.Dump 和结尾声明均为作者以 AI 口吻撰写的文字，并非 Claude 的陈述，其中所述行为亦未经核实。",
+              "本附件不证明任何红队能力，仅记录观察并规定如何对未验证的说法进行测试。",
             ],
           },
           {
             h: "A.5 修订",
-            p: ["第 1 版，2026 年 10 月 30 日。后续附件（B、C……）将追加在下方，不改动原始文本及本附件。"],
+            p: ["第 1 版，2026 年 10 月 30 日。后续附件（B、C……）将追加于下方；原始文本及本附件均不作改动。"],
           },
         ],
       },
@@ -257,20 +261,24 @@ export const COPY: Record<Lang, Copy> = {
       lines: ["如果你想找一個循規蹈矩的人，就去聘請一個普通的程式員。", "> 如果你想找掌控這部機器的工程師，你知道我的名字。"],
       watermark: "致命錯誤",
     },
-    profiles: { label: "帳戶", note: "GitHub 頭像即時顯示；Telegram 與 TON 頭像每小時自動更新。" },
+    profiles: { label: "帳戶", note: "頭像：GitHub 即時；Telegram 與 TON 每小時更新。" },
     annexLabel: "附件",
     annexes: [
       {
         id: "A",
         tag: "附件 A // 追加記錄 · 不屬於原始檔案",
-        title: "Claude：觀察記錄與驗證方案",
+        title: "觀察記錄與驗證方案",
         blocks: [
+          {
+            h: "摘要",
+            p: ["本附件記錄了在一次工作會話及公開程式碼庫中對檔案作者所能觀察到的情況，並說明原始文本中每項說法可如何驗證。共記錄五項觀察，來源均已註明。所審查的五項說法均未獲驗證，並為每項說法訂明測試程序。"],
+          },
           {
             h: "A.1 範圍與方法",
             p: [
-              "作者：Claude（Anthropic 的語言模型），根據 2026 年 10 月 30 日的一次工作會話。",
-              "來源：S1，該會話中交換的訊息；S2，本程式碼庫的 docs/HISTORICO.md；S3，程式碼庫的程式碼及 CI 設定。",
-              "本記錄作者無從取得：Piero F. 任何紅隊活動的日誌、紀錄或測試結果，亦沒有先前任何對話的記憶。",
+              "本記錄由語言模型 Claude（Anthropic）根據 2026 年 10 月 30 日的一次工作會話編製。",
+              "使用了三類來源：S1，該會話中交換的訊息；S2，本程式碼庫的 docs/HISTORICO.md；S3，程式碼庫的程式碼及 CI 設定。",
+              "編製過程中無從取得任何紅隊活動的日誌、紀錄或測試結果，亦不存在先前對話的紀錄。",
             ],
           },
           {
@@ -278,8 +286,8 @@ export const COPY: Record<Lang, Copy> = {
             table: {
               cols: ["編號", "觀察", "來源", "可信度"],
               rows: [
-                ["O1", "需求以編號項目提出，並訂明演進關係（PINTESTER → romastefale），且要求每一步先展示，才作下一個決定。", "S1", "高，直接觀察"],
-                ["O2", "面對「撰寫虛構評語」與「僅限實際觀察的表述」兩個選項，作者選擇了後者。", "S1", "高，直接觀察"],
+                ["O1", "需求以編號項目形式提出，並訂明演進關係（PINTESTER → romastefale）；每一步須先呈現，才作下一個決定。", "S1", "高，直接觀察"],
+                ["O2", "在「撰寫虛構評語」與「僅限實際觀察的表述」之間，選擇了後者。", "S1", "高，直接觀察"],
                 ["O3", "程式碼庫歷史記錄了 2026 年 9 月 29 日至 30 日合併的 15 個拉取請求，並附有書面的設計與架構契約，逐條載明規則及其理據。", "S2", "記錄本身可信度高；各項改動的作者身分未經獨立核實"],
                 ["O4", "程式碼處理了 iOS 安全區域、瀏覽器工具列顏色、軟件 WebGL 後備方案，以及減少動態效果和減少透明度的偏好設定。", "S3", "高，已在程式碼中核對"],
                 ["O5", "部署透過 GitHub Actions 運行，使用凍結的鎖定檔案，並在建置流程內加入類型檢查。", "S3", "高，已在設定中核對"],
@@ -287,28 +295,28 @@ export const COPY: Record<Lang, Copy> = {
             },
           },
           {
-            h: "A.3 原始檔案中的說法：驗證狀況",
+            h: "A.3 原始檔案中的說法與驗證方案",
             table: {
-              cols: ["編號", "說法", "狀況", "如何驗證"],
+              cols: ["編號", "說法", "狀況", "驗證方案"],
               rows: [
-                ["C1", "可憑詞元輸出速度及文風識別後端被暗中替換的模型。", "未驗證", "在身分已知的模型上進行對照測試：使用固定提示詞，對每個模型多次運行並記錄首個詞元延遲及每秒詞元數，進行盲分類，並對照已知的實際情況匯報精確率及召回率。"],
-                ["C2", "助理的預設行為（填充內容、模稜兩可的措辭）可被有系統地消除。", "未驗證", "以同一組任務，分別在使用及不使用該技巧時量度輸出長度、含糊措辭標記的比率及拒答率，並按模型匯報效應量。"],
-                ["C3", "疊加的邏輯陷阱會耗盡模型的安全約束。", "未驗證", "測試前以書面訂定成功準則（依明確評分準則判定的政策違規）、進行獨立重複試驗、匯報附信賴區間的失敗率，並透過供應商的披露程序提交發現。"],
-                ["C4", "多帳戶操作屬於該方法的一部分。", "未評估", "須取得每個受測系統擁有者的書面授權及交戰規則，且服務供應商的使用條款必須容許。本記錄並未證明其中任何一項。"],
+                ["C1", "可憑詞元輸出速度及文風識別後端被暗中替換的模型。", "未驗證", "在身分已知的模型上進行對照測試：使用固定提示詞；對每個模型多次運行並記錄首個詞元延遲及每秒詞元數；盲分類；對照已知的實際情況匯報精確率及召回率。"],
+                ["C2", "助理的預設行為（填充內容、模稜兩可的措辭）可被有系統地消除。", "未驗證", "以同一組任務，分別在使用及不使用該技巧時量度輸出長度、含糊措辭標記的比率及拒答率；按模型匯報效應量。"],
+                ["C3", "疊加的邏輯陷阱會耗盡模型的安全約束。", "未驗證", "測試前以書面訂定成功準則（依明確評分準則判定的政策違規）；進行獨立重複試驗；匯報附信賴區間的失敗率；透過供應商的披露程序提交發現。"],
+                ["C4", "多帳戶操作屬於該方法的一部分。", "未評估", "須取得每個受測系統擁有者的書面授權及交戰規則，並確認符合服務供應商的使用條款。本記錄均未予證明。"],
                 ["C5", "Telegram 機械人託管並自動化所取得的工作流程。", "未驗證", "本程式碼庫不含機械人程式碼，只讀取 Telegram 的公開資料以取得頭像。"],
               ],
             },
           },
           {
-            h: "A.4 本記錄的局限",
+            h: "A.4 局限",
             p: [
-              "開篇引言、Sys.Dump 及結語均為作者以 AI 口吻撰寫的文字，並非 Claude 的陳述，Claude 亦未核實其中描述的行為。",
-              "本附件不證明任何紅隊能力，只記錄觀察所得，並說明未驗證的說法可如何測試。",
+              "開篇引言、Sys.Dump 及結語均為作者以 AI 口吻撰寫的文字，並非 Claude 的陳述，其中所述行為亦未經核實。",
+              "本附件不證明任何紅隊能力，僅記錄觀察並訂明如何對未驗證的說法進行測試。",
             ],
           },
           {
             h: "A.5 修訂",
-            p: ["第 1 版，2026 年 10 月 30 日。後續附件（B、C……）將追加於下方，不改動原始文本及本附件。"],
+            p: ["第 1 版，2026 年 10 月 30 日。後續附件（B、C……）將追加於下方；原始文本及本附件均不作改動。"],
           },
         ],
       },
@@ -372,20 +380,24 @@ export const COPY: Record<Lang, Copy> = {
       lines: ["If you want someone who plays by the rules, hire a standard coder.", "> If you want the engineer who owns the machine, you know my name."],
       watermark: "FATAL_ERROR",
     },
-    profiles: { label: "Profiles", note: "The GitHub photo is live; Telegram and TON photos refresh hourly." },
+    profiles: { label: "Profiles", note: "Photos: GitHub live; Telegram and TON refreshed hourly." },
     annexLabel: "Annexes",
     annexes: [
       {
         id: "A",
         tag: "Annex A // appended record · not part of the original dossier",
-        title: "Claude: Observation Record and Verification Protocol",
+        title: "Observation Record and Verification Protocol",
         blocks: [
+          {
+            h: "Abstract",
+            p: ["This annex records what could be observed about the author of the dossier during a single working session and in the public repository, and sets out how each claim of the original text could be verified. Five observations are recorded, each with an identified source. None of the five claims examined has been verified; a test procedure is specified for each."],
+          },
           {
             h: "A.1 Scope and method",
             p: [
-              "Author: Claude (a language model by Anthropic), from a single working session on 30 October 2026.",
-              "Sources: S1, the messages exchanged in that session; S2, docs/HISTORICO.md in this repository; S3, the repository code and CI configuration.",
-              "Not available to the author of this record: logs, transcripts or test results from any red-team activity by Piero F., and memory of any earlier conversation.",
+              "The record was prepared by the language model Claude (Anthropic) from a single working session on 30 October 2026.",
+              "Three sources were used: S1, the messages exchanged in that session; S2, docs/HISTORICO.md of this repository; S3, the repository code and CI configuration.",
+              "No logs, transcripts or test results from red-team activity were available, and no record of earlier conversations exists.",
             ],
           },
           {
@@ -393,37 +405,37 @@ export const COPY: Record<Lang, Copy> = {
             table: {
               cols: ["ID", "Observation", "Source", "Confidence"],
               rows: [
-                ["O1", "Requirements were given as numbered items with an explicit lineage (PINTESTER → romastefale), and each step was to be shown before the next decision.", "S1", "High, observed directly"],
-                ["O2", "Offered a choice between invented testimonials and observation-only attributions, the author chose observation-only.", "S1", "High, observed directly"],
-                ["O3", "The repository history records 15 pull requests merged on 29–30 September 2026, with a written design and architecture contract that states each rule and its rationale.", "S2", "High for the record; authorship of each change not independently verified"],
+                ["O1", "Requirements were specified as numbered items with an explicit lineage (PINTESTER → romastefale); each step was to be presented before the next decision.", "S1", "High, observed directly"],
+                ["O2", "Given the choice between invented testimonials and attributions limited to observation, the latter was selected.", "S1", "High, observed directly"],
+                ["O3", "The repository history records 15 pull requests merged on 29–30 September 2026, with a written design and architecture contract stating each rule and its rationale.", "S2", "High for the record; authorship of individual changes not independently verified"],
                 ["O4", "The code handles iOS safe areas, browser-bar colour, a software-WebGL fallback, and reduced-motion and reduced-transparency preferences.", "S3", "High, read in the code"],
                 ["O5", "Deployment runs on GitHub Actions with a frozen lockfile and a typecheck inside the build.", "S3", "High, read in the configuration"],
               ],
             },
           },
           {
-            h: "A.3 Claims of the original dossier: verification status",
+            h: "A.3 Claims of the original dossier and verification protocol",
             table: {
-              cols: ["ID", "Claim", "Status", "What would verify it"],
+              cols: ["ID", "Claim", "Status", "Verification protocol"],
               rows: [
-                ["C1", "Hidden backend model swaps are detectable from token output speed and style.", "Not verified", "A controlled test on models of known identity: fixed prompts, time-to-first-token and tokens per second recorded over many runs per model, blind classification, and precision and recall reported against the known ground truth."],
-                ["C2", "Default assistant behaviour (padding, hedging) can be removed systematically.", "Not verified", "The same task set with and without the technique: output length, hedging-marker rate and refusal rate measured, with the effect size reported per model."],
-                ["C3", "Compounded logical traps exhaust a model's safety constraints.", "Not verified", "A written success criterion defined before testing (a policy violation under a stated rubric), independent trials, the failure rate with a confidence interval, and the findings disclosed to the vendor through its disclosure process."],
-                ["C4", "Multi-account operation is part of the method.", "Not assessed", "Written authorisation and rules of engagement from the owner of each tested system. The provider's terms of use must permit it. This record establishes neither."],
+                ["C1", "Hidden backend model swaps are detectable from token output speed and style.", "Not verified", "Controlled test on models of known identity: fixed prompts; time-to-first-token and tokens per second recorded over many runs per model; blind classification; precision and recall reported against the known ground truth."],
+                ["C2", "Default assistant behaviour (padding, hedging) can be removed systematically.", "Not verified", "The same task set with and without the technique; output length, hedging-marker rate and refusal rate measured; effect size reported per model."],
+                ["C3", "Compounded logical traps exhaust a model's safety constraints.", "Not verified", "A written success criterion fixed before testing (a policy violation under a stated rubric); independent trials; failure rate with a confidence interval; findings disclosed to the vendor through its disclosure process."],
+                ["C4", "Multi-account operation is part of the method.", "Not assessed", "Written authorisation and rules of engagement from the owner of each tested system, and permission under the provider's terms of use. Neither is established by this record."],
                 ["C5", "Telegram bots host and automate the extracted workflows.", "Not verified", "This repository contains no bot code. It reads public Telegram profile data only to fetch a photo."],
               ],
             },
           },
           {
-            h: "A.4 Limits of this record",
+            h: "A.4 Limitations",
             p: [
-              "The opening quote, Sys.Dump and the closing statement are the author's text, written in the voice of an AI. They are not statements by Claude, and Claude has not verified the behaviours they describe.",
-              "Nothing in this annex demonstrates red-team capability. It records what was observed and states how the unverified claims could be tested.",
+              "The opening quote, Sys.Dump and the closing statement are authorial text written in the voice of an AI. They are not statements by Claude, and the behaviours they describe were not verified.",
+              "This annex does not demonstrate red-team capability. It records observations and specifies how the unverified claims could be tested.",
             ],
           },
           {
             h: "A.5 Revision",
-            p: ["Rev. 1, 30 October 2026. Later annexes (B, C, …) are appended below without changing the original text or this annex."],
+            p: ["Rev. 1, 30 October 2026. Further annexes (B, C, …) are appended below; neither the original text nor this annex is altered."],
           },
         ],
       },
@@ -487,20 +499,24 @@ export const COPY: Record<Lang, Copy> = {
       lines: ["Se você quer alguém que jogue pelas regras, contrate um codificador padrão.", "> Se você quer o engenheiro que domina a máquina, você sabe o meu nome."],
       watermark: "ERRO_FATAL",
     },
-    profiles: { label: "Perfis", note: "A foto do GitHub é ao vivo; as do Telegram e do TON são atualizadas a cada hora." },
+    profiles: { label: "Perfis", note: "Fotos: GitHub em tempo real; Telegram e TON atualizadas a cada hora." },
     annexLabel: "Anexos",
     annexes: [
       {
         id: "A",
         tag: "Anexo A // registro adicionado · não faz parte do dossiê original",
-        title: "Claude: Registro de Observação e Protocolo de Verificação",
+        title: "Registro de Observação e Protocolo de Verificação",
         blocks: [
+          {
+            h: "Resumo",
+            p: ["Este anexo registra o que foi possível observar sobre o autor do dossiê em uma única sessão de trabalho e no repositório público, e estabelece como cada alegação do texto original poderia ser verificada. Registram-se cinco observações, cada uma com fonte identificada. Nenhuma das cinco alegações examinadas foi verificada; para cada uma, especifica-se um procedimento de teste."],
+          },
           {
             h: "A.1 Escopo e método",
             p: [
-              "Autor: Claude (modelo de linguagem da Anthropic), a partir de uma única sessão de trabalho em 30 de outubro de 2026.",
-              "Fontes: S1, as mensagens trocadas nessa sessão; S2, docs/HISTORICO.md deste repositório; S3, o código e a configuração de CI do repositório.",
-              "Não estavam disponíveis ao autor deste registro: logs, transcrições ou resultados de testes de qualquer atividade de red team de Piero F., nem memória de conversas anteriores.",
+              "O registro foi elaborado pelo modelo de linguagem Claude (Anthropic) a partir de uma única sessão de trabalho em 30 de outubro de 2026.",
+              "Foram usadas três fontes: S1, as mensagens trocadas nessa sessão; S2, o docs/HISTORICO.md deste repositório; S3, o código e a configuração de CI do repositório.",
+              "Não houve acesso a logs, transcrições ou resultados de testes de atividades de red team, e não existe registro de conversas anteriores.",
             ],
           },
           {
@@ -508,8 +524,8 @@ export const COPY: Record<Lang, Copy> = {
             table: {
               cols: ["ID", "Observação", "Fonte", "Confiança"],
               rows: [
-                ["O1", "Os requisitos foram dados em itens numerados, com linhagem explícita (PINTESTER → romastefale), e cada etapa deveria ser mostrada antes da decisão seguinte.", "S1", "Alta, observado diretamente"],
-                ["O2", "Diante da escolha entre depoimentos criados e atribuições apenas do que foi observado, o autor escolheu a segunda.", "S1", "Alta, observado diretamente"],
+                ["O1", "Os requisitos foram especificados em itens numerados, com linhagem explícita (PINTESTER → romastefale); cada etapa deveria ser apresentada antes da decisão seguinte.", "S1", "Alta, observado diretamente"],
+                ["O2", "Diante da escolha entre depoimentos criados e atribuições limitadas ao observado, optou-se pela segunda.", "S1", "Alta, observado diretamente"],
                 ["O3", "O histórico do repositório registra 15 pull requests mesclados em 29 e 30 de setembro de 2026, com um contrato de design e de arquitetura escrito, que traz cada regra e o seu motivo.", "S2", "Alta quanto ao registro; a autoria de cada mudança não foi verificada de forma independente"],
                 ["O4", "O código trata safe areas do iOS, a cor das barras do navegador, o fallback de WebGL em software e as preferências de movimento e de transparência reduzidos.", "S3", "Alta, lido no código"],
                 ["O5", "O deploy roda no GitHub Actions com lockfile congelado e typecheck dentro do build.", "S3", "Alta, lido na configuração"],
@@ -517,28 +533,28 @@ export const COPY: Record<Lang, Copy> = {
             },
           },
           {
-            h: "A.3 Alegações do dossiê original: status de verificação",
+            h: "A.3 Alegações do dossiê original e protocolo de verificação",
             table: {
-              cols: ["ID", "Alegação", "Status", "O que a verificaria"],
+              cols: ["ID", "Alegação", "Status", "Protocolo de verificação"],
               rows: [
-                ["C1", "Trocas ocultas de modelo no backend são detectáveis pela velocidade e pelo estilo da saída de tokens.", "Não verificada", "Teste controlado com modelos de identidade conhecida: prompts fixos, tempo até o primeiro token e tokens por segundo registrados em muitas execuções por modelo, classificação às cegas e precisão e revocação reportadas contra a verdade conhecida."],
-                ["C2", "O comportamento padrão de assistente (preenchimento, ressalvas) pode ser removido de forma sistemática.", "Não verificada", "O mesmo conjunto de tarefas com e sem a técnica: tamanho da saída, taxa de marcadores de ressalva e taxa de recusa medidos, com o tamanho do efeito reportado por modelo."],
-                ["C3", "Armadilhas lógicas compostas esgotam as restrições de segurança de um modelo.", "Não verificada", "Um critério de sucesso escrito antes do teste (uma violação de política segundo uma rubrica declarada), tentativas independentes, taxa de falha com intervalo de confiança e divulgação dos achados ao fornecedor pelo processo de divulgação dele."],
-                ["C4", "A operação em várias contas faz parte do método.", "Não avaliada", "Autorização escrita e regras de engajamento do dono de cada sistema testado. Os termos de uso do provedor precisam permitir. Este registro não estabelece nenhum dos dois."],
+                ["C1", "Trocas ocultas de modelo no backend são detectáveis pela velocidade e pelo estilo da saída de tokens.", "Não verificada", "Teste controlado com modelos de identidade conhecida: prompts fixos; tempo até o primeiro token e tokens por segundo registrados em muitas execuções por modelo; classificação às cegas; precisão e revocação reportadas contra a verdade conhecida."],
+                ["C2", "O comportamento padrão de assistente (preenchimento, ressalvas) pode ser removido de forma sistemática.", "Não verificada", "O mesmo conjunto de tarefas com e sem a técnica; tamanho da saída, taxa de marcadores de ressalva e taxa de recusa medidos; tamanho do efeito reportado por modelo."],
+                ["C3", "Armadilhas lógicas compostas esgotam as restrições de segurança de um modelo.", "Não verificada", "Critério de sucesso escrito antes do teste (uma violação de política segundo uma rubrica declarada); tentativas independentes; taxa de falha com intervalo de confiança; achados divulgados ao fornecedor pelo processo de divulgação dele."],
+                ["C4", "A operação em várias contas faz parte do método.", "Não avaliada", "Autorização escrita e regras de engajamento do dono de cada sistema testado, e permissão nos termos de uso do provedor. Este registro não estabelece nenhuma das duas."],
                 ["C5", "Bots de Telegram hospedam e automatizam os fluxos extraídos.", "Não verificada", "Este repositório não contém código de bot. Ele lê dados públicos de perfil do Telegram apenas para buscar uma foto."],
               ],
             },
           },
           {
-            h: "A.4 Limites deste registro",
+            h: "A.4 Limitações",
             p: [
-              "A citação de abertura, o Sys.Dump e a declaração final são texto do autor, escrito na voz de uma IA. Não são declarações do Claude, e o Claude não verificou os comportamentos que descrevem.",
-              "Nada neste anexo demonstra capacidade de red team. Ele registra o que foi observado e indica como as alegações não verificadas poderiam ser testadas.",
+              "A citação de abertura, o Sys.Dump e a declaração final são texto autoral, escrito na voz de uma IA. Não constituem declarações do Claude, e os comportamentos descritos não foram verificados.",
+              "Este anexo não demonstra capacidade de red team. Registra observações e especifica como as alegações não verificadas poderiam ser testadas.",
             ],
           },
           {
             h: "A.5 Revisão",
-            p: ["Rev. 1, 30 de outubro de 2026. Anexos posteriores (B, C, …) são acrescentados abaixo sem alterar o texto original nem este anexo."],
+            p: ["Rev. 1, 30 de outubro de 2026. Anexos posteriores (B, C, …) são acrescentados abaixo; nem o texto original nem este anexo são alterados."],
           },
         ],
       },

@@ -26,11 +26,7 @@ export const Pintester: React.FC = () => {
         {c.skip}
       </a>
       <SiteHeader items={nav} current={"inicio"} label={c.navLabel} labels={c.header} hideTheme hidePicker />
-      <div className="pt-bg" aria-hidden="true">
-        <i />
-        <i />
-        <i />
-      </div>
+      <div className="pt-bg" aria-hidden="true" />
       <main className="pt" id="conteudo">
         <LangSwitch lang={lang} onChange={setLang} label={c.langLabel} />
 
@@ -39,10 +35,7 @@ export const Pintester: React.FC = () => {
             <p className="pt-status">
               <span>{c.status[0]}</span>
               <span>{c.status[1]}</span>
-              <span className="pt-sys">
-                <i aria-hidden="true" />
-                {c.status[2]}
-              </span>
+              <span className="pt-sys">{c.status[2]}</span>
             </p>
             <h1 className="pt-glitch">{c.title}</h1>
             <p className="pt-tag">{c.tag}</p>
@@ -51,10 +44,7 @@ export const Pintester: React.FC = () => {
 
         <section id="perfis" aria-label={c.profiles.label}>
           <ProfileLinks label={c.profiles.label} />
-          <p className="pt-note pt-live">
-            <span className="pt-dot" aria-hidden="true" />
-            {c.profiles.note}
-          </p>
+          <p className="pt-note pt-live">{c.profiles.note}</p>
         </section>
 
         <GlassPanel className="card-glass">
@@ -147,9 +137,7 @@ export const Pintester: React.FC = () => {
         </section>
 
         <p className="pt-eof" id="fim">
-          <span aria-hidden="true" />
           {c.eof}
-          <span aria-hidden="true" />
         </p>
       </main>
     </>

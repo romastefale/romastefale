@@ -1,6 +1,9 @@
-/* PINTESTER on glass: black + #ff0033, JetBrains Mono, scanlines, glitch.
-   The page is always dark. These overrides beat both :root[data-theme] blocks
-   (specificity 0,2,1 vs 0,2,0), so the shared theme toggle cannot turn it light. */
+/* PINTESTER on the template's glass: black + #ff0033, JetBrains Mono.
+   Same rules as the template (docs/DESIGN-CONTRATO.md): the edge of a card is
+   its frost and translucent tint plus the soft float shadow, never a drawn
+   line; the background is blurred colour that ends in the page colour at the
+   top and bottom. The page is always dark: these overrides beat both
+   :root[data-theme] blocks (specificity 0,2,1 vs 0,2,0). */
 html[data-page="pintester"][data-theme]{
   --page-edge:#07060a;
   --page-bg:none;
@@ -8,20 +11,19 @@ html[data-page="pintester"][data-theme]{
   --text-dim:#c4c6d0;
   --faint:#9a9ca8;
   --link:#ff4d6d;
-  --focus:rgba(255,255,255,.75);
+  --focus:rgba(255,255,255,.7);
   --red:#ff0033;
   --vidro-tint:rgba(20,14,20,.42);
-  --glass-float:0 12px 34px rgba(0,0,0,.5),0 2px 6px rgba(0,0,0,.35);
 }
 html[data-page="pintester"] body{font-family:"JetBrains Mono Variable",ui-monospace,Menlo,Consolas,monospace}
 /* JetBrains Mono has no CJK glyphs: pick each script's native UI face by language. */
 html[data-page="pintester"]:lang(zh-Hans) body{font-family:"JetBrains Mono Variable","PingFang SC","Noto Sans CJK SC","Source Han Sans SC","Microsoft YaHei",ui-monospace,sans-serif}
 html[data-page="pintester"]:lang(zh-HK) body{font-family:"JetBrains Mono Variable","PingFang HK","Noto Sans CJK HK","Source Han Sans HK","Microsoft JhengHei",ui-monospace,sans-serif}
-html[data-page="pintester"]:lang(zh-Hans) :is(.pt-body,.pt-card p,.pt-block p,.pt-closing,.pt-note,.pt-table td),
-html[data-page="pintester"]:lang(zh-HK) :is(.pt-body,.pt-card p,.pt-block p,.pt-closing,.pt-note,.pt-table td){line-height:1.85}
+html[data-page="pintester"]:lang(zh-Hans) :is(.pt-body,.pt-card p,.pt-block p,.pt-closing,.pt-note,.pt-row dd),
+html[data-page="pintester"]:lang(zh-HK) :is(.pt-body,.pt-card p,.pt-block p,.pt-closing,.pt-note,.pt-row dd){line-height:1.85}
 html[data-page="pintester"] ::selection{background:var(--red);color:#fff}
 
-/* Own column layout (this page does not load Home.css). */
+/* The template's column: one card per block, 16px apart. */
 .pt{
   padding:calc(84px + env(safe-area-inset-top, 0px)) max(18px, env(safe-area-inset-right, 0px)) calc(28px + env(safe-area-inset-bottom, 0px)) max(18px, env(safe-area-inset-left, 0px));
   display:flex;flex-direction:column;gap:16px;
@@ -29,114 +31,67 @@ html[data-page="pintester"] ::selection{background:var(--red);color:#fff}
 .pt > *{width:100%;max-width:564px;margin-left:auto;margin-right:auto}
 .card-glass{border-radius:22px}
 
-/* Background fields and scanlines. Like the template's html::before they are one
-   viewport tall in lvh (the largest viewport, so they never resize when the browser
-   bars collapse) and run past the top and bottom edges by --fade-under, so the
-   translucent bars never show a cut. Only transforms animate. */
+/* Static colour fields (no animation, like the template). One viewport tall in
+   lvh and run past both edges by --fade-under; a vertical mask takes the fields
+   off the top and bottom 14%, so both edges are the exact page colour. */
 .pt-bg{
-  position:fixed;z-index:-1;left:0;right:0;pointer-events:none;overflow:hidden;
+  position:fixed;z-index:-1;left:0;right:0;pointer-events:none;
   top:calc(-1 * var(--fade-under));height:calc(100vh + 2 * var(--fade-under));height:calc(100lvh + 2 * var(--fade-under));
-  background:repeating-linear-gradient(180deg,rgba(0,0,0,0) 0 1px,rgba(0,0,0,.22) 1px 3px);
+  background:
+    radial-gradient(70% 38% at 0% 18%, rgba(255,0,51,.5) 0%, rgba(255,0,51,0) 70%),
+    radial-gradient(60% 34% at 100% 56%, rgba(122,10,36,.62) 0%, rgba(122,10,36,0) 70%),
+    radial-gradient(70% 30% at 28% 88%, rgba(255,77,109,.26) 0%, rgba(255,77,109,0) 72%);
+  -webkit-mask-image:linear-gradient(180deg,transparent 0,#000 14%,#000 86%,transparent 100%);
+  mask-image:linear-gradient(180deg,transparent 0,#000 14%,#000 86%,transparent 100%);
 }
-.pt-bg i{position:absolute;border-radius:50%;opacity:.8;animation:pt-drift 22s ease-in-out infinite alternate;will-change:transform}
-.pt-bg i:nth-child(1){width:60vmax;height:60vmax;left:-20vmax;top:-12vmax;background:radial-gradient(circle,rgba(255,0,51,.85) 0%,rgba(255,0,51,0) 66%)}
-.pt-bg i:nth-child(2){width:52vmax;height:52vmax;right:-18vmax;top:34%;background:radial-gradient(circle,rgba(122,10,36,.95) 0%,rgba(122,10,36,0) 66%);animation-duration:27s}
-.pt-bg i:nth-child(3){width:44vmax;height:44vmax;left:14vw;bottom:-16vmax;background:radial-gradient(circle,rgba(255,77,109,.55) 0%,rgba(255,77,109,0) 68%);animation-duration:31s}
-@keyframes pt-drift{to{transform:translate(8vmax,6vmax) scale(1.12)}}
 
-.pt-hero{padding:34px 22px;text-align:center}
-.pt-tag{margin:0;color:var(--red);font-size:11px;font-weight:800;letter-spacing:.24em;text-transform:uppercase}
-.pt-tag::before,.pt-sec h2::before{content:"> "}
-.pt-status{display:flex;flex-wrap:wrap;justify-content:center;gap:6px 14px;margin:0 0 18px;font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--faint)}
-.pt-status span:first-child{color:var(--text);font-weight:800}
-.pt-status span:first-child::before{content:"> ";color:var(--red)}
-.pt-sys{display:inline-flex;align-items:center;gap:7px;color:var(--red);font-weight:800}
-.pt-sys i{width:8px;height:8px;border-radius:2px;background:var(--red);animation:pt-blink 1.6s ease-in-out infinite}
-@keyframes pt-blink{50%{opacity:.25}}
-.pt-glitch{margin:0 0 16px;font-size:clamp(30px,8.4vw,48px);line-height:1.04;letter-spacing:-.04em;text-transform:uppercase;font-weight:800;text-wrap:balance}
-@media (hover:hover){
-  .pt-glitch:hover{text-shadow:2px 0 var(--red),-2px 0 #0ff;animation:pt-glitch .22s linear infinite}
-}
-@keyframes pt-glitch{20%{transform:translate(-2px,1px)}40%{transform:translate(-1px,-1px)}60%{transform:translate(2px,1px)}80%{transform:translate(1px,-1px)}}
+/* Hero */
+.pt-hero{padding:24px 20px 22px;display:flex;flex-direction:column;gap:8px}
+.pt-status{display:flex;flex-wrap:wrap;gap:4px 14px;margin:0 0 6px;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--faint)}
+.pt-sys{color:var(--red)}
+.pt-glitch{margin:0;font-size:clamp(28px,7vw,38px);line-height:1.1;letter-spacing:-.03em;font-weight:800;text-wrap:balance}
+.pt-tag{margin:0;font-size:13px;line-height:1.5;color:var(--red)}
 
-.pt-sec{padding:22px 20px}
-.pt-sec h2{margin:0 0 14px;padding-bottom:10px;font-size:12px;letter-spacing:.24em;text-transform:uppercase;color:var(--red);border-bottom:1px solid rgba(255,0,51,.35)}
-.pt-note{margin:0 0 14px;font-size:12px;line-height:1.5;color:var(--faint)}
-
-.pt-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px}
-.pt-card{padding:14px 16px;border-radius:16px;background:rgba(255,255,255,.05);box-shadow:inset 0 0 0 1px rgba(255,255,255,.1);transition:box-shadow .25s,background .25s}
+/* Sections */
+.pt-sec{padding:20px}
+.pt-sec h2{margin:0 0 12px;font-size:12px;font-weight:800;letter-spacing:.08em;color:var(--red)}
+.pt-note{margin:0;font-size:12px;line-height:1.6;color:var(--faint)}
+.pt-live{margin:10px 4px 0}
+.pt-body{margin:0 0 12px;font-size:13.5px;line-height:1.75;color:var(--text-dim)}
+.pt-body:last-child{margin-bottom:0}
+.pt-body strong{color:var(--text)}
+.pt-cards{display:grid;grid-template-columns:1fr;gap:10px}
+.pt-card{padding:14px 16px;border-radius:16px;background:rgba(255,255,255,.04)}
 .pt-card h3{margin:0 0 6px;font-size:14px}
-.pt-card p{margin:0;font-size:12px;line-height:1.55;color:var(--text-dim)}
-@media (hover:hover){.pt-card:hover{background:rgba(70,10,26,.5);box-shadow:inset 0 0 22px rgba(255,0,51,.16),inset 0 0 0 1px var(--red)}}
+.pt-card p{margin:0;font-size:12.5px;line-height:1.65;color:var(--text-dim)}
 
-.pt-end{text-align:center}
-.pt-big{margin:0 0 8px;font-size:clamp(17px,4.6vw,22px);font-weight:800;text-transform:uppercase;letter-spacing:-.02em;line-height:1.3;text-wrap:balance}
-.pt-eof{margin:18px 0 0;color:var(--red);font-size:11px;font-weight:800;letter-spacing:.3em}
+/* Original quote and closing */
+.pt-machine{margin:0;padding:20px;border-radius:22px;background:rgba(255,0,51,.07)}
+.pt-machine p{margin:0;font-size:15px;font-weight:700;font-style:italic;line-height:1.7}
+.pt-end{position:relative;overflow:hidden}
+.pt-watermark{position:absolute;inset:0;display:grid;place-items:center;font-size:clamp(40px,15vw,88px);font-weight:800;text-transform:uppercase;white-space:nowrap;color:var(--red);opacity:.06;pointer-events:none;user-select:none}
+.pt-end > :not(.pt-watermark){position:relative}
+.pt-big{margin:0;font-size:16px;font-weight:800;line-height:1.5;text-wrap:balance}
+.pt-closing{margin:12px 0 0;font-size:13px;line-height:1.7;color:var(--text-dim)}
+.pt-closing span{display:block;margin-top:6px;color:var(--red)}
+.pt-eof{margin:4px 0 0;text-align:center;font-size:11px;letter-spacing:.2em;color:var(--faint)}
 
-@media (prefers-reduced-motion:reduce){
-  .pt-bg i,.pt-glitch:hover{animation:none}
-  .pt-card{transition:none}
-}
+/* Annexes: appended after the original, in report register. */
+.pt-annexes{display:flex;flex-direction:column;gap:16px}
+.pt-annex{padding:20px}
+.pt-annex-tag{margin:0 0 6px;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--faint)}
+.pt-annex h2{margin:0;font-size:16px;font-weight:800;line-height:1.4;letter-spacing:-.01em;color:var(--text)}
+.pt-block{display:flex;flex-direction:column;gap:8px;margin-top:20px}
+.pt-block h3{margin:0;font-size:12px;font-weight:800;letter-spacing:.04em;color:var(--red)}
+.pt-block p{margin:0;font-size:12.5px;line-height:1.75;color:var(--text-dim)}
+/* Tables read as stacked records: no rules, only tint and spacing. */
+.pt-table table,.pt-table tbody,.pt-table tr,.pt-table td{display:block}
+.pt-table thead{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%)}
+.pt-table tbody{display:grid;gap:8px}
+.pt-table tr{padding:12px 14px;border-radius:14px;background:rgba(255,255,255,.04)}
+.pt-table td{padding:0;font-size:12.5px;line-height:1.7;color:var(--text-dim)}
+.pt-table td:first-child{margin-bottom:4px;font-weight:800;color:var(--red)}
+.pt-table td:not(:first-child)::before{content:attr(data-label);display:block;margin-top:8px;font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--faint)}
 @media (prefers-reduced-transparency:reduce){
   html[data-page="pintester"][data-theme]{--vidro-tint:rgba(24,16,24,.96)}
 }
-
-/* Liquid-glass edges: a bright top rim, a faint full rim and a red under-glow. */
-.pt .glass{
-  box-shadow:var(--glass-float),inset 0 1px 0 rgba(255,255,255,.24),inset 0 0 0 1px rgba(255,255,255,.07),0 22px 54px -26px rgba(255,0,51,.4);
-}
-/* Entrance: each block rises in turn; it ends fully visible and is skipped for reduced motion. */
-.pt > *{animation:pt-in .7s var(--glass-ease) both}
-.pt > :nth-child(2){animation-delay:.07s}
-.pt > :nth-child(3){animation-delay:.14s}
-.pt > :nth-child(4){animation-delay:.21s}
-.pt > :nth-child(5){animation-delay:.28s}
-.pt > :nth-child(6){animation-delay:.35s}
-@keyframes pt-in{from{opacity:0;transform:translateY(18px) scale(.985)}to{opacity:1;transform:none}}
-@media (prefers-reduced-motion:reduce){.pt > *{animation:none}}
-
-.pt-live{display:flex;align-items:flex-start;gap:8px;margin:10px 4px 0}
-.pt-dot{flex:none;margin-top:.55em;width:8px;height:8px;border-radius:50%;background:#27d36b;animation:pt-pulse 2s infinite}
-@keyframes pt-pulse{0%{box-shadow:0 0 0 0 rgba(39,211,107,.6)}70%,100%{box-shadow:0 0 0 7px rgba(39,211,107,0)}}
-@media (prefers-reduced-motion:reduce){.pt-dot{animation:none}}
-
-/* Original quote, body copy and closing. */
-.pt-machine{margin:0;padding:22px 20px;border-left:4px solid var(--red);border-right:4px solid var(--red);border-radius:inherit;background:rgba(255,0,51,.08);text-align:center}
-.pt-machine p{margin:0;font-size:clamp(15px,4.2vw,19px);font-weight:800;font-style:italic;line-height:1.6;text-wrap:balance}
-.pt-body{margin:0 0 14px;font-size:13px;line-height:1.75;color:var(--text-dim);text-align:justify;hyphens:auto}
-.pt-body:last-child{margin-bottom:0}
-.pt-body strong{color:var(--text)}
-.pt-end{position:relative;overflow:hidden;text-align:center}
-.pt-watermark{position:absolute;inset:0;display:grid;place-items:center;font-size:clamp(46px,17vw,110px);font-weight:800;text-transform:uppercase;white-space:nowrap;color:var(--red);opacity:.09;pointer-events:none;user-select:none}
-.pt-end > :not(.pt-watermark){position:relative}
-.pt-closing{margin:14px 0 0;padding:14px 16px;border-radius:14px;background:rgba(0,0,0,.35);box-shadow:inset 0 0 0 1px rgba(255,255,255,.12);font-size:13px;font-weight:700;line-height:1.7;text-align:left}
-.pt-closing span{display:block;margin-top:8px;color:var(--red)}
-.pt-eof{display:flex;align-items:center;justify-content:center;gap:12px;margin:8px 0 0;color:var(--red);font-size:11px;font-weight:800;letter-spacing:.3em}
-.pt-eof span{width:clamp(24px,10vw,64px);height:2px;background:var(--red)}
-
-/* Annexes: appended after the original, set apart by a dashed rim. */
-.pt-annexes{display:flex;flex-direction:column;gap:16px}
-.pt .pt-annex-glass{box-shadow:var(--glass-float),inset 0 1px 0 rgba(255,255,255,.2),inset 0 0 0 1px rgba(255,255,255,.07)}
-.pt-annex{padding:22px 20px}
-.pt-annex-tag{margin:0 0 6px;font-size:10.5px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:var(--faint)}
-.pt-annex h2{margin:0 0 4px;padding:0 0 12px;font-size:15px;letter-spacing:-.01em;text-transform:none;color:var(--text);border-bottom:1px dashed rgba(255,255,255,.28);line-height:1.4}
-.pt-annex h2::before{content:none}
-.pt-block{display:flex;flex-direction:column;gap:8px;margin-top:18px}
-.pt-block h3{margin:0;font-size:12px;letter-spacing:.06em;color:var(--red)}
-.pt-block p{margin:0;font-size:12.5px;line-height:1.7;color:var(--text-dim)}
-.pt-table{border-radius:14px;box-shadow:inset 0 0 0 1px rgba(255,255,255,.1);overflow:hidden}
-.pt-table table{width:100%;border-collapse:collapse;font-size:12px;line-height:1.6;table-layout:auto}
-.pt-table th{padding:9px 12px;text-align:left;font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--faint);background:rgba(255,255,255,.05)}
-.pt-table td{padding:10px 12px;vertical-align:top;color:var(--text-dim);border-top:1px solid rgba(255,255,255,.08)}
-.pt-table td:first-child{color:var(--red);font-weight:800;white-space:nowrap}
-@media (max-width:700px){
-  .pt-table thead{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%)}
-  .pt-table table,.pt-table tbody,.pt-table tr,.pt-table td{display:block}
-  .pt-table tr{padding:10px 12px;border-top:1px solid rgba(255,255,255,.1)}
-  .pt-table tr:first-child{border-top:0}
-  .pt-table td{padding:2px 0;border:0}
-  .pt-table td:first-child{margin-bottom:2px}
-  .pt-table td:not(:first-child)::before{content:attr(data-label);display:block;margin-top:6px;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--faint)}
-}
-@media (min-width:701px){.pt{--col:760px}.pt > *{max-width:var(--col)}}
-@media (prefers-reduced-motion:reduce){.pt-sys i{animation:none}}

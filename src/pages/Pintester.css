@@ -17,11 +17,11 @@ html[data-page="pintester"] body{font-family:"JetBrains Mono Variable",ui-monosp
 /* JetBrains Mono has no CJK glyphs: pick each script's native UI face by language. */
 html[data-page="pintester"]:lang(zh-Hans) body{font-family:"JetBrains Mono Variable","PingFang SC","Noto Sans CJK SC","Source Han Sans SC","Microsoft YaHei",ui-monospace,sans-serif}
 html[data-page="pintester"]:lang(zh-HK) body{font-family:"JetBrains Mono Variable","PingFang HK","Noto Sans CJK HK","Source Han Sans HK","Microsoft JhengHei",ui-monospace,sans-serif}
-html[data-page="pintester"]:lang(zh-Hans) :is(.pt-obs span,.pt-card p,.pt-limits p,.pt-note,.pt-sub),
-html[data-page="pintester"]:lang(zh-HK) :is(.pt-obs span,.pt-card p,.pt-limits p,.pt-note,.pt-sub){line-height:1.75}
+html[data-page="pintester"]:lang(zh-Hans) :is(.pt-body,.pt-card p,.pt-block p,.pt-closing,.pt-note,.pt-table td),
+html[data-page="pintester"]:lang(zh-HK) :is(.pt-body,.pt-card p,.pt-block p,.pt-closing,.pt-note,.pt-table td){line-height:1.85}
 html[data-page="pintester"] ::selection{background:var(--red);color:#fff}
 
-/* Own column layout (the home's .feed lives in Home.css, which this page does not load). */
+/* Own column layout (this page does not load Home.css). */
 .pt{
   padding:calc(84px + env(safe-area-inset-top, 0px)) max(18px, env(safe-area-inset-right, 0px)) calc(28px + env(safe-area-inset-bottom, 0px)) max(18px, env(safe-area-inset-left, 0px));
   display:flex;flex-direction:column;gap:16px;
@@ -29,20 +29,31 @@ html[data-page="pintester"] ::selection{background:var(--red);color:#fff}
 .pt > *{width:100%;max-width:564px;margin-left:auto;margin-right:auto}
 .card-glass{border-radius:22px}
 
-/* red blobs drifting behind the glass */
-.pt-bg{position:fixed;inset:0;z-index:-1;overflow:hidden;pointer-events:none}
-.pt-bg i{position:absolute;border-radius:50%;filter:blur(44px);opacity:.7;animation:pt-drift 20s ease-in-out infinite alternate}
-.pt-bg i:nth-child(1){width:48vmax;height:48vmax;left:-14vmax;top:-10vmax;background:radial-gradient(circle,#ff0033 0%,transparent 68%)}
-.pt-bg i:nth-child(2){width:40vmax;height:40vmax;right:-12vmax;top:32vh;background:radial-gradient(circle,#7a0a24 0%,transparent 68%);animation-duration:25s}
-.pt-bg i:nth-child(3){width:32vmax;height:32vmax;left:18vw;bottom:-14vmax;background:radial-gradient(circle,#ff4d6d 0%,transparent 70%);opacity:.4;animation-duration:29s}
-@keyframes pt-drift{to{transform:translate(8vmax,6vmax) scale(1.15)}}
-.pt-scan{position:fixed;inset:0;z-index:40;pointer-events:none;background:linear-gradient(rgba(0,0,0,0) 50%,rgba(0,0,0,.2) 50%);background-size:100% 3px}
+/* Background fields and scanlines. Like the template's html::before they are one
+   viewport tall in lvh (the largest viewport, so they never resize when the browser
+   bars collapse) and run past the top and bottom edges by --fade-under, so the
+   translucent bars never show a cut. Only transforms animate. */
+.pt-bg{
+  position:fixed;z-index:-1;left:0;right:0;pointer-events:none;overflow:hidden;
+  top:calc(-1 * var(--fade-under));height:calc(100vh + 2 * var(--fade-under));height:calc(100lvh + 2 * var(--fade-under));
+  background:repeating-linear-gradient(180deg,rgba(0,0,0,0) 0 1px,rgba(0,0,0,.22) 1px 3px);
+}
+.pt-bg i{position:absolute;border-radius:50%;opacity:.8;animation:pt-drift 22s ease-in-out infinite alternate;will-change:transform}
+.pt-bg i:nth-child(1){width:60vmax;height:60vmax;left:-20vmax;top:-12vmax;background:radial-gradient(circle,rgba(255,0,51,.85) 0%,rgba(255,0,51,0) 66%)}
+.pt-bg i:nth-child(2){width:52vmax;height:52vmax;right:-18vmax;top:34%;background:radial-gradient(circle,rgba(122,10,36,.95) 0%,rgba(122,10,36,0) 66%);animation-duration:27s}
+.pt-bg i:nth-child(3){width:44vmax;height:44vmax;left:14vw;bottom:-16vmax;background:radial-gradient(circle,rgba(255,77,109,.55) 0%,rgba(255,77,109,0) 68%);animation-duration:31s}
+@keyframes pt-drift{to{transform:translate(8vmax,6vmax) scale(1.12)}}
 
 .pt-hero{padding:34px 22px;text-align:center}
-.pt-tag{margin:0 0 14px;color:var(--red);font-size:11px;font-weight:800;letter-spacing:.26em;text-transform:uppercase}
+.pt-tag{margin:0;color:var(--red);font-size:11px;font-weight:800;letter-spacing:.24em;text-transform:uppercase}
 .pt-tag::before,.pt-sec h2::before{content:"> "}
-.pt-glitch{margin:0 0 14px;font-size:clamp(30px,8.4vw,48px);line-height:1.04;letter-spacing:-.04em;text-transform:uppercase;font-weight:800;text-wrap:balance}
-.pt-sub{margin:0;font-size:13px;color:var(--faint)}
+.pt-status{display:flex;flex-wrap:wrap;justify-content:center;gap:6px 14px;margin:0 0 18px;font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--faint)}
+.pt-status span:first-child{color:var(--text);font-weight:800}
+.pt-status span:first-child::before{content:"> ";color:var(--red)}
+.pt-sys{display:inline-flex;align-items:center;gap:7px;color:var(--red);font-weight:800}
+.pt-sys i{width:8px;height:8px;border-radius:2px;background:var(--red);animation:pt-blink 1.6s ease-in-out infinite}
+@keyframes pt-blink{50%{opacity:.25}}
+.pt-glitch{margin:0 0 16px;font-size:clamp(30px,8.4vw,48px);line-height:1.04;letter-spacing:-.04em;text-transform:uppercase;font-weight:800;text-wrap:balance}
 @media (hover:hover){
   .pt-glitch:hover{text-shadow:2px 0 var(--red),-2px 0 #0ff;animation:pt-glitch .22s linear infinite}
 }
@@ -51,13 +62,6 @@ html[data-page="pintester"] ::selection{background:var(--red);color:#fff}
 .pt-sec{padding:22px 20px}
 .pt-sec h2{margin:0 0 14px;padding-bottom:10px;font-size:12px;letter-spacing:.24em;text-transform:uppercase;color:var(--red);border-bottom:1px solid rgba(255,0,51,.35)}
 .pt-note{margin:0 0 14px;font-size:12px;line-height:1.5;color:var(--faint)}
-.pt-obs{list-style:none;margin:0 0 14px;padding:0;display:grid;gap:12px}
-.pt-obs li{display:flex;flex-direction:column;gap:2px;padding-left:14px;border-left:2px solid rgba(255,0,51,.6)}
-.pt-obs strong{font-size:14px}
-.pt-obs span{font-size:12.5px;line-height:1.55;color:var(--text-dim)}
-.pt-limits{padding:14px 16px;border-radius:16px;background:rgba(255,0,51,.1);box-shadow:inset 0 0 0 1px rgba(255,0,51,.4)}
-.pt-limits h3{margin:0 0 6px;font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:var(--red)}
-.pt-limits p{margin:0;font-size:12.5px;line-height:1.55;color:var(--text-dim)}
 
 .pt-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px}
 .pt-card{padding:14px 16px;border-radius:16px;background:rgba(255,255,255,.05);box-shadow:inset 0 0 0 1px rgba(255,255,255,.1);transition:box-shadow .25s,background .25s}
@@ -95,3 +99,44 @@ html[data-page="pintester"] ::selection{background:var(--red);color:#fff}
 .pt-dot{flex:none;margin-top:.55em;width:8px;height:8px;border-radius:50%;background:#27d36b;animation:pt-pulse 2s infinite}
 @keyframes pt-pulse{0%{box-shadow:0 0 0 0 rgba(39,211,107,.6)}70%,100%{box-shadow:0 0 0 7px rgba(39,211,107,0)}}
 @media (prefers-reduced-motion:reduce){.pt-dot{animation:none}}
+
+/* Original quote, body copy and closing. */
+.pt-machine{margin:0;padding:22px 20px;border-left:4px solid var(--red);border-right:4px solid var(--red);border-radius:inherit;background:rgba(255,0,51,.08);text-align:center}
+.pt-machine p{margin:0;font-size:clamp(15px,4.2vw,19px);font-weight:800;font-style:italic;line-height:1.6;text-wrap:balance}
+.pt-body{margin:0 0 14px;font-size:13px;line-height:1.75;color:var(--text-dim);text-align:justify;hyphens:auto}
+.pt-body:last-child{margin-bottom:0}
+.pt-body strong{color:var(--text)}
+.pt-end{position:relative;overflow:hidden;text-align:center}
+.pt-watermark{position:absolute;inset:0;display:grid;place-items:center;font-size:clamp(46px,17vw,110px);font-weight:800;text-transform:uppercase;white-space:nowrap;color:var(--red);opacity:.09;pointer-events:none;user-select:none}
+.pt-end > :not(.pt-watermark){position:relative}
+.pt-closing{margin:14px 0 0;padding:14px 16px;border-radius:14px;background:rgba(0,0,0,.35);box-shadow:inset 0 0 0 1px rgba(255,255,255,.12);font-size:13px;font-weight:700;line-height:1.7;text-align:left}
+.pt-closing span{display:block;margin-top:8px;color:var(--red)}
+.pt-eof{display:flex;align-items:center;justify-content:center;gap:12px;margin:8px 0 0;color:var(--red);font-size:11px;font-weight:800;letter-spacing:.3em}
+.pt-eof span{width:clamp(24px,10vw,64px);height:2px;background:var(--red)}
+
+/* Annexes: appended after the original, set apart by a dashed rim. */
+.pt-annexes{display:flex;flex-direction:column;gap:16px}
+.pt .pt-annex-glass{box-shadow:var(--glass-float),inset 0 1px 0 rgba(255,255,255,.2),inset 0 0 0 1px rgba(255,255,255,.07)}
+.pt-annex{padding:22px 20px}
+.pt-annex-tag{margin:0 0 6px;font-size:10.5px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:var(--faint)}
+.pt-annex h2{margin:0 0 4px;padding:0 0 12px;font-size:15px;letter-spacing:-.01em;text-transform:none;color:var(--text);border-bottom:1px dashed rgba(255,255,255,.28);line-height:1.4}
+.pt-annex h2::before{content:none}
+.pt-block{display:flex;flex-direction:column;gap:8px;margin-top:18px}
+.pt-block h3{margin:0;font-size:12px;letter-spacing:.06em;color:var(--red)}
+.pt-block p{margin:0;font-size:12.5px;line-height:1.7;color:var(--text-dim)}
+.pt-table{border-radius:14px;box-shadow:inset 0 0 0 1px rgba(255,255,255,.1);overflow:hidden}
+.pt-table table{width:100%;border-collapse:collapse;font-size:12px;line-height:1.6;table-layout:auto}
+.pt-table th{padding:9px 12px;text-align:left;font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--faint);background:rgba(255,255,255,.05)}
+.pt-table td{padding:10px 12px;vertical-align:top;color:var(--text-dim);border-top:1px solid rgba(255,255,255,.08)}
+.pt-table td:first-child{color:var(--red);font-weight:800;white-space:nowrap}
+@media (max-width:700px){
+  .pt-table thead{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%)}
+  .pt-table table,.pt-table tbody,.pt-table tr,.pt-table td{display:block}
+  .pt-table tr{padding:10px 12px;border-top:1px solid rgba(255,255,255,.1)}
+  .pt-table tr:first-child{border-top:0}
+  .pt-table td{padding:2px 0;border:0}
+  .pt-table td:first-child{margin-bottom:2px}
+  .pt-table td:not(:first-child)::before{content:attr(data-label);display:block;margin-top:6px;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--faint)}
+}
+@media (min-width:701px){.pt{--col:760px}.pt > *{max-width:var(--col)}}
+@media (prefers-reduced-motion:reduce){.pt-sys i{animation:none}}

@@ -1,7 +1,7 @@
 const BASE = import.meta.env.BASE_URL;
 
 /** Every page of the portal (Vite entries in vite.config.ts), in menu order. */
-export type PageKey = "inicio" | "pintester" | "amostra" | "painel" | "galeria" | "fundo" | "contrato" | "arquitetura";
+export type PageKey = "inicio" | "amostra" | "painel" | "galeria" | "fundo" | "contrato" | "arquitetura";
 interface PageInfo {
   key: PageKey;
   href: string;
@@ -14,11 +14,7 @@ interface PageInfo {
   summary: string;
 }
 export const PAGES: PageInfo[] = [
-  { key: "inicio", href: BASE, pick: "Início", label: "Início", title: "Interface de vidro", summary: "" },
-  {
-    key: "pintester", href: `${BASE}pintester.html`, pick: "PINTESTER", label: "PINTESTER", title: "PINTESTER | Root",
-    summary: "Dossiê de red team em vidro líquido preto e vermelho, com perfis ao vivo e o que o Claude observou.",
-  },
+  { key: "inicio", href: BASE, pick: "PINTESTER", label: "PINTESTER", title: "PINTESTER", summary: "" },
   {
     key: "amostra", href: `${BASE}liquid-glass-sample.html`, pick: "Amostra", label: "Amostra", title: "Amostra Liquid Glass",
     summary: "Lente no lugar sobre o título, cartões com refract e botões materiais.",

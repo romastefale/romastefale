@@ -3,7 +3,9 @@ import { createPortal } from "react-dom";
 import { useReducedMotion } from "../lib/useMedia";
 import "./PageSearch.css";
 
-const MIN = 2;
+/** Shortest query that searches: 2 characters, but 1 for Chinese (a single character is a word). */
+const CJK = /[\u3400-\u9fff]/;
+const minLen = (q: string) => (CJK.test(q) ? 1 : 2);
 const HL_ALL = "page-search";
 const HL_CURRENT = "page-search-current";
 
@@ -43,7 +45,7 @@ const textNodes = (scope: HTMLElement) => {
 
 const findRanges = (scope: HTMLElement, query: string) => {
   const q = fold(query.trim()).text;
-  if (q.length < MIN) return [];
+  if (q.length < minLen(q)) return [];
   const ranges: Range[] = [];
   for (const node of textNodes(scope)) {
     const { text, map } = fold(node.nodeValue ?? "");
@@ -79,13 +81,32 @@ export const Magnifier: React.FC<{ size?: number }> = ({ size = 15 }) => (
  * Case- and accent-insensitive. Closing clears the query and every highlight.
  * Always mounted (so it can fade in and out); `inert` while closed.
  */
+/** Every visible and spoken string of the search bar (Portuguese by default). */
+export interface SearchLabels {
+  search: string;
+  clear: string;
+  prev: string;
+  next: string;
+  none: string;
+  of: (current: number, count: number) => string;
+}
+export const SEARCH_PT: SearchLabels = {
+  search: "Pesquisar na página",
+  clear: "Limpar pesquisa",
+  prev: "Resultado anterior",
+  next: "Próximo resultado",
+  none: "Nenhum resultado",
+  of: (i, n) => `${i} de ${n}`,
+};
+
 export const PageSearch: React.FC<{
   open: boolean;
   scopeId: string;
   id: string;
   inputRef: React.RefObject<HTMLInputElement | null>;
   onClose: () => void;
-}> = ({ open, scopeId, id, inputRef, onClose }) => {
+  labels?: SearchLabels;
+}> = ({ open, scopeId, id, inputRef, onClose, labels = SEARCH_PT }) => {
   const [query, setQuery] = useState("");
   const [count, setCount] = useState(0);
   const [current, setCurrent] = useState(-1);
@@ -193,7 +214,7 @@ export const PageSearch: React.FC<{
   };
 
   const q = query.trim();
-  const status = q.length < MIN ? "" : count ? `${current + 1} de ${count}` : "Nenhum resultado";
+  const status = q.length < minLen(q) ? "" : count ? labels.of(current + 1, count) : labels.none;
   const inputId = `${id}-input`;
 
   return (
@@ -212,7 +233,7 @@ export const PageSearch: React.FC<{
         id={id}
         className="page-search"
         role="search"
-        aria-label="Pesquisar na página"
+        aria-label={labels.search}
         data-open={open || undefined}
         inert={!open}
         onSubmit={(e) => {
@@ -224,8 +245,8 @@ export const PageSearch: React.FC<{
           ref={inputRef}
           id={inputId}
           type="search"
-          placeholder="Pesquisar na página"
-          aria-label="Pesquisar na página"
+          placeholder={labels.search}
+          aria-label={labels.search}
           autoComplete="off"
           autoCapitalize="off"
           spellCheck={false}
@@ -250,7 +271,7 @@ export const PageSearch: React.FC<{
           <button
             className="ps-btn"
             type="button"
-            aria-label="Limpar pesquisa"
+            aria-label={labels.clear}
             onClick={() => {
               reset();
               inputRef.current?.focus();
@@ -262,12 +283,12 @@ export const PageSearch: React.FC<{
           </button>
         )}
         <span className="ps-sep" aria-hidden="true" />
-        <button className="ps-btn" type="button" aria-label="Resultado anterior" disabled={count < 2} onClick={() => step(-1)}>
+        <button className="ps-btn" type="button" aria-label={labels.prev} disabled={count < 2} onClick={() => step(-1)}>
           <svg viewBox="0 0 24 24" aria-hidden="true">
             <path d="m6 14.5 6-6 6 6" fill="none" stroke="currentColor" strokeWidth="2.3" strokeLinecap="round" strokeLinejoin="round" />
           </svg>
         </button>
-        <button className="ps-btn" type="button" aria-label="Próximo resultado" disabled={count < 2} onClick={() => step(1)}>
+        <button className="ps-btn" type="button" aria-label={labels.next} disabled={count < 2} onClick={() => step(1)}>
           <svg viewBox="0 0 24 24" aria-hidden="true">
             <path d="m6 9.5 6 6 6-6" fill="none" stroke="currentColor" strokeWidth="2.3" strokeLinecap="round" strokeLinejoin="round" />
           </svg>

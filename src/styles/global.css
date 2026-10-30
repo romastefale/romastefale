@@ -121,17 +121,30 @@ html::before{
   pointer-events:none;
   background:var(--page-bg) center/100% 100% no-repeat;
 }
-/* The only CSS fade is at the top. It starts in the exact solid edge colour,
-   then eases to fully transparent; the SVG already handles the bottom edge. */
+/* Edge layers (docs/TELA-CHEIA-E-BARRAS.md, PR #17 and #18).
+   Top: a fixed layer that runs PAST the viewport edge by --fade-under, solid
+   --page-edge in that stretch, then eases to transparent. On iOS Safari 26 the
+   translucent address bar then shows the exact page colour, with the bar open,
+   collapsed or standalone. A fixed layer at the bottom would end above the bar
+   and cut the page, so there is none: the fade at the bottom is a real block
+   in the flow (body::after), after the last content. */
+:root{--fade-under:max(120px, calc(100lvh - 100svh))}
 body::before{
-  content:"";position:fixed;z-index:50;left:0;right:0;top:0;
-  height:calc(env(safe-area-inset-top, 0px) + var(--fade-top));
+  content:"";position:fixed;z-index:50;left:0;right:0;top:calc(-1 * var(--fade-under));
+  --fade-h:calc(env(safe-area-inset-top, 0px) + var(--fade-top));
+  height:calc(var(--fade-under) + var(--fade-h));
   pointer-events:none;
   background:linear-gradient(180deg,
-    var(--page-edge) 0%,
-    color-mix(in srgb, var(--page-edge) 72%, transparent) 30%,
-    color-mix(in srgb, var(--page-edge) 30%, transparent) 65%,
+    var(--page-edge) 0,
+    var(--page-edge) var(--fade-under),
+    color-mix(in srgb, var(--page-edge) 72%, transparent) calc(var(--fade-under) + var(--fade-h) * .3),
+    color-mix(in srgb, var(--page-edge) 30%, transparent) calc(var(--fade-under) + var(--fade-h) * .65),
     transparent 100%);
+}
+body::after{
+  content:"";display:block;pointer-events:none;
+  height:calc(88px + env(safe-area-inset-bottom, 0px));
+  background:linear-gradient(180deg, transparent 0, var(--page-edge) calc(100% - 24px - env(safe-area-inset-bottom, 0px)));
 }
 a{color:inherit}
 /* <picture> is only a source picker: the <img> inside is what gets laid out. */

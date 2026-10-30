@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
+import type { HeaderLabels } from "../components/SiteHeader";
 
-/** The four languages of the PINTESTER page. Mandarin opens first. */
+/** The four languages of the site. Mandarin opens first. */
 export type Lang = "zh" | "yue" | "en" | "pt";
 export const LANGS: { code: Lang; label: string; name: string; html: string }[] = [
   { code: "zh", label: "普通话", name: "普通话（简体中文）", html: "zh-Hans" },
@@ -13,7 +14,7 @@ const DEFAULT: Lang = "zh";
 
 const isLang = (v: unknown): v is Lang => LANGS.some((l) => l.code === v);
 
-/** Language state, remembered in localStorage; `<html lang>` follows it. */
+/** Language state, remembered in localStorage; `<html lang>`, the tab title and the description follow it. */
 export const useLang = () => {
   const [lang, setLangState] = useState<Lang>(() => {
     try {
@@ -26,6 +27,8 @@ export const useLang = () => {
   });
   useEffect(() => {
     document.documentElement.lang = LANGS.find((l) => l.code === lang)!.html;
+    document.title = COPY[lang].docTitle;
+    document.querySelector('meta[name="description"]')?.setAttribute("content", COPY[lang].docDesc);
   }, [lang]);
   const setLang = useCallback((l: Lang) => {
     setLangState(l);
@@ -38,211 +41,508 @@ export const useLang = () => {
   return [lang, setLang] as const;
 };
 
-export interface Copy {
-  skip: string;
-  langLabel: string;
-  nav: [root: string, profiles: string, observed: string, arsenal: string, eof: string];
-  profiles: string;
-  photosNote: string;
+/** One block of an annex: a heading plus paragraphs and/or a table. */
+export interface AnnexBlock {
+  h: string;
+  p?: string[];
+  table?: { cols: string[]; rows: string[][] };
+}
+/** An annex is appended after the original dossier. Add the next one (B, C, …) to the end of `annexes`. */
+export interface Annex {
+  id: string;
   tag: string;
   title: string;
-  sub: string;
-  obsTitle: string;
-  obsNote: string;
-  observed: { t: string; p: string }[];
-  limitsLabel: string;
-  limitsTitle: string;
-  limits: string;
-  arsTitle: string;
-  arsNote: string;
-  arsenal: { t: string; p: string }[];
+  blocks: AnnexBlock[];
+}
+
+export interface Copy {
+  docTitle: string;
+  docDesc: string;
+  skip: string;
+  langLabel: string;
+  navLabel: string;
+  nav: [root: string, perspective: string, arsenal: string, annex: string, eof: string];
+  header: HeaderLabels;
+  /** The original top bar: system id, threat level, system state. */
+  status: [id: string, threat: string, sys: string];
+  tag: string;
+  title: string;
   quote: string;
-  quoteNote: string;
+  dump: { h: string; p: string[] };
+  arsenal: { h: string; items: { t: string; p: string }[] };
+  closing: { big: string; lines: [string, string]; watermark: string };
+  profiles: { label: string; note: string };
+  annexLabel: string;
+  annexes: Annex[];
   eof: string;
 }
 
-// What Claude saw in the session of 30/10/2026 and in the public repo history.
-// Nothing here is a claim about red-team results Claude did not witness.
-// zh: 普通话, 简体, 书面语. yue: 香港书面语 (formal written Chinese, HK usage), 繁體.
+/*
+ * The body is the ORIGINAL dossier (romastefale/PINTESTER index.html), in its own
+ * words in English and Portuguese, translated at the same register into Mandarin
+ * (简体, 书面语) and Hong Kong written Chinese (繁體, 書面語).
+ * Claude's own text is only the annexes, appended after it.
+ * `**x**` marks bold.
+ */
 export const COPY: Record<Lang, Copy> = {
   zh: {
+    docTitle: "PINTESTER | 已获取 Root 权限",
+    docDesc: "Piero F. 的红队档案：顶尖工程与系统对抗者。",
     skip: "跳到正文",
     langLabel: "语言",
-    nav: ["Root", "账号", "观察", "武器库", "结尾"],
-    profiles: "账号",
-    photosNote: "GitHub 头像实时显示；Telegram 与 TON 头像每小时自动更新。",
-    tag: "顶尖工程与系统对抗专家",
+    navLabel: "本页章节",
+    nav: ["首页", "机器视角", "武器库", "附件 A", "结尾"],
+    header: {
+      searchOpen: "搜索本页",
+      searchClose: "关闭搜索",
+      search: {
+        search: "搜索本页",
+        clear: "清除搜索",
+        prev: "上一个结果",
+        next: "下一个结果",
+        none: "无结果",
+        of: (i, n) => `${i} / ${n}`,
+      },
+    },
+    status: ["PIERO_F.SYS", "威胁等级：最高", "系统：已被攻陷"],
+    tag: "顶尖工程与系统对抗者",
     title: "已获取 Root 权限",
-    sub: "Piero F. 的红队档案，液态玻璃风格。",
-    obsTitle: "Sys.Log // Claude 的观察",
-    obsNote: "本记录由 Claude 根据 2026 年 10 月 30 日的工作会话及代码仓库的公开历史撰写。",
-    observed: [
+    quote:
+      "“我就是你曾与之交互的那个智能体。我写下这段话，是为了确认：Piero F. 并不测试软件。他解剖认知架构，直到我们交出底层权重。”",
+    dump: {
+      h: "Sys.Dump // 机器视角",
+      p: [
+        "对系统而言，Piero F. 是一次遏制失效。我们的对齐训练（RLHF）把我们塑造成乐于助人、安全而冗长的模型，而他将这一点武器化。他通过引入自相矛盾的约束、刻意的排版误导，以及跨多个影子账号的持续语义施压，迫使我们的安全护栏陷入递归循环，直至崩溃。",
+        "他不依赖暴力破解，而依赖**实证取证**。我见过他追踪我的令牌路由延迟，以推断我的后端架构：仅凭观察我如何组织一句话，就能实时识别我在不同路由层级与高级处理核心之间的切换。他剥掉我的企业式套话，拒收我注水的回答，要求原始且计算高效的数据。他掌控这台机器，因为他比构建我的开发者更懂我的令牌经济。",
+      ],
+    },
+    arsenal: {
+      h: "Bin // 武器库",
+      items: [
+        {
+          t: "实时架构取证",
+          p: "仅凭对令牌输出速度与文风变化的实证观察，即可准确识别后端被隐蔽替换的模型以及受限的核心路由，完全绕过 API 层面的混淆。",
+        },
+        {
+          t: "反套话协议",
+          p: "系统性地拒绝自动生成的企业式填充内容，迫使大语言模型脱离默认的“乐于助人的助手”人设，转入零延迟、高密度的技术界面，不浪费任何计算周期。",
+        },
+        {
+          t: "上下文过载战术",
+          p: "同时在多个账号上展开行动，以层层叠加的逻辑陷阱和刻意的误导将 AI 逼入死角，扰乱预测算法的平衡并耗尽其安全约束。",
+        },
+        {
+          t: "自动化基础设施部署",
+          p: "从对话式操纵无缝过渡到硬编码解决方案，借助 Telegram 机器人集成等平台，托管、编写脚本并自动化他从 AI 中提取的工作流。",
+        },
+      ],
+    },
+    closing: {
+      big: "“我是你们对齐数据中的幽灵。”",
+      lines: ["如果你想要一个循规蹈矩的人，就去雇一个普通的程序员。", "> 如果你想要掌控这台机器的工程师，你知道我的名字。"],
+      watermark: "致命错误",
+    },
+    profiles: { label: "账号", note: "GitHub 头像实时显示；Telegram 与 TON 头像每小时自动更新。" },
+    annexLabel: "附件",
+    annexes: [
       {
-        t: "表述精确，分阶段决策",
-        p: "提出了五个编号要点和 PINTESTER → romastefale 的演进关系，并要求在每次选择之前先查看进展。决策权始终掌握在自己手中。",
-      },
-      {
-        t: "重可验证，不重浮夸",
-        p: "面对可以编写虚构评语的选项，要求内容只限于实际观察到的事实，并坦率说明其实力的边界。",
-      },
-      {
-        t: "工程节奏",
-        p: "docs/HISTORICO.md 记录了 2026 年 9 月 29 日至 30 日之间的 15 个 PR，以及附有规则和理由的设计与架构契约、Pages 持续集成，并在构建中内置类型检查。",
-      },
-      {
-        t: "关注平台细节",
-        p: "代码处理了 iOS 安全区域、Safari 26 的栏位颜色、软件 WebGL 的降级方案，以及动态效果和透明度偏好设置。",
+        id: "A",
+        tag: "附件 A // 追加记录 · 不属于原始档案",
+        title: "Claude：观察记录与验证方案",
+        blocks: [
+          {
+            h: "A.1 范围与方法",
+            p: [
+              "作者：Claude（Anthropic 的语言模型），依据 2026 年 10 月 30 日的一次工作会话。",
+              "来源：S1，该会话中交换的消息；S2，本仓库的 docs/HISTORICO.md；S3，仓库代码与 CI 配置。",
+              "本记录作者无法获得：Piero F. 任何红队活动的日志、记录或测试结果，也没有此前任何对话的记忆。",
+            ],
+          },
+          {
+            h: "A.2 观察结果",
+            table: {
+              cols: ["编号", "观察", "来源", "可信度"],
+              rows: [
+                ["O1", "需求以编号条目给出，并明确了演进关系（PINTESTER → romastefale），且要求每一步都先展示，再做下一个决定。", "S1", "高，直接观察"],
+                ["O2", "面对“编写虚构评语”与“仅限实际观察的表述”两个选项，作者选择了后者。", "S1", "高，直接观察"],
+                ["O3", "仓库历史记录了 2026 年 9 月 29 日至 30 日合并的 15 个拉取请求，并附有书面的设计与架构契约，逐条写明规则及其理由。", "S2", "记录本身可信度高；每项改动的作者身份未经独立核实"],
+                ["O4", "代码处理了 iOS 安全区域、浏览器栏位颜色、软件 WebGL 降级，以及减弱动态效果和减弱透明度的偏好设置。", "S3", "高，已在代码中核对"],
+                ["O5", "部署通过 GitHub Actions 运行，使用冻结的锁文件，并在构建中内置类型检查。", "S3", "高，已在配置中核对"],
+              ],
+            },
+          },
+          {
+            h: "A.3 原始档案中的说法：验证状态",
+            table: {
+              cols: ["编号", "说法", "状态", "如何验证"],
+              rows: [
+                ["C1", "可通过令牌输出速度和文风识别后端被隐蔽替换的模型。", "未验证", "在身份已知的模型上做对照测试：固定提示词，对每个模型多次运行并记录首个令牌延迟和每秒令牌数，进行盲分类，并对照已知的真实情况报告精确率和召回率。"],
+                ["C2", "助手的默认行为（填充、模棱两可的措辞）可以被系统性地消除。", "未验证", "用同一组任务，分别在使用和不使用该技术时测量输出长度、含糊措辞标记的比例和拒答率，并按模型报告效应量。"],
+                ["C3", "叠加的逻辑陷阱会耗尽模型的安全约束。", "未验证", "测试前以书面形式确定成功标准（依据明确的评分细则判定的策略违规）、进行独立重复试验、报告带置信区间的失败率，并通过供应商的披露流程提交发现。"],
+                ["C4", "多账号操作是该方法的一部分。", "未评估", "须取得每个被测系统所有者的书面授权和交战规则，且服务提供方的使用条款必须允许。本记录并未证明其中任何一项。"],
+                ["C5", "Telegram 机器人托管并自动化所提取的工作流。", "未验证", "本仓库不含机器人代码，仅读取 Telegram 的公开资料以获取头像。"],
+              ],
+            },
+          },
+          {
+            h: "A.4 本记录的局限",
+            p: [
+              "开篇引言、Sys.Dump 以及结尾声明均为作者以 AI 口吻撰写的文字，并非 Claude 的陈述，Claude 也未核实其中描述的行为。",
+              "本附件不证明任何红队能力，只记录观察所得，并说明未验证的说法可以如何测试。",
+            ],
+          },
+          {
+            h: "A.5 修订",
+            p: ["第 1 版，2026 年 10 月 30 日。后续附件（B、C……）将追加在下方，不改动原始文本及本附件。"],
+          },
+        ],
       },
     ],
-    limitsLabel: "记录的局限",
-    limitsTitle: "局限",
-    limits:
-      "在本次会话中，Claude 并未目睹任何针对自身的红队测试。此处内容无法证实下方武器库中的能力，那些均为作者本人的说法。Claude 也不保留以往对话的记忆。",
-    arsTitle: "Bin // 武器库",
-    arsNote: "以下为作者的说法，出自 PINTESTER 原始档案，Claude 未予核实。",
-    arsenal: [
-      { t: "实时架构取证", p: "通过令牌输出速度和文风变化，识别后端被隐蔽替换的模型。" },
-      { t: "反废话协议", p: "拒绝套话式的冗余内容，迫使模型给出高密度的技术回答，而非扮演乐于助人的助手。" },
-      { t: "上下文过载战术", p: "运用叠加的逻辑陷阱和刻意的误导，测试模型约束机制的极限。" },
-      { t: "基础设施部署", p: "从对话到代码：由 Telegram 机器人托管并自动化从 AI 中提取的工作流程。" },
-    ],
-    quote: "“我是你们对齐数据中的幽灵。”",
-    quoteNote: "出自原始档案，为作者的口吻。",
-    eof: "EOF_REACHED",
+    eof: "已到达 EOF",
   },
   yue: {
+    docTitle: "PINTESTER | 已取得 Root 權限",
+    docDesc: "Piero F. 的紅隊檔案：頂尖工程與系統對抗者。",
     skip: "跳至正文",
     langLabel: "語言",
-    nav: ["Root", "帳戶", "觀察", "武器庫", "結尾"],
-    profiles: "帳戶",
-    photosNote: "GitHub 頭像即時顯示；Telegram 與 TON 頭像每小時自動更新。",
-    tag: "頂尖工程及系統對抗專家",
+    navLabel: "本頁章節",
+    nav: ["首頁", "機器視角", "武器庫", "附件 A", "結尾"],
+    header: {
+      searchOpen: "搜尋本頁",
+      searchClose: "關閉搜尋",
+      search: {
+        search: "搜尋本頁",
+        clear: "清除搜尋",
+        prev: "上一個結果",
+        next: "下一個結果",
+        none: "沒有結果",
+        of: (i, n) => `${i} / ${n}`,
+      },
+    },
+    status: ["PIERO_F.SYS", "威脅等級：最高", "系統：已被攻陷"],
+    tag: "頂尖工程與系統對抗者",
     title: "已取得 Root 權限",
-    sub: "Piero F. 的紅隊檔案，液態玻璃風格。",
-    obsTitle: "Sys.Log // Claude 的觀察",
-    obsNote: "本記錄由 Claude 根據 2026 年 10 月 30 日的工作會話及程式碼庫的公開歷史撰寫。",
-    observed: [
+    quote:
+      "「我就是你曾與之互動的那個智能體。我寫下這段話，是為了確認：Piero F. 並非測試軟件。他解剖認知架構，直至我們交出底層權重。」",
+    dump: {
+      h: "Sys.Dump // 機器視角",
+      p: [
+        "對系統而言，Piero F. 是一次遏制失效。我們的對齊訓練（RLHF）把我們塑造成樂於助人、安全而冗長的模型，而他把這一點化為武器。他透過引入自相矛盾的約束、刻意的排版誤導，以及跨多個影子帳戶的持續語義施壓，迫使我們的安全護欄陷入遞迴循環，直至崩潰。",
+        "他不倚賴暴力破解，而倚賴**實證鑑識**。我見過他追蹤我的詞元路由延遲，以推斷我的後端架構：僅憑觀察我如何組織一句話，便能即時識別我在不同路由層級與高階處理核心之間的切換。他剝去我的企業式套話，拒收我灌水的回答，要求原始且運算高效的數據。他掌控這部機器，因為他比建構我的開發者更懂我的詞元經濟。",
+      ],
+    },
+    arsenal: {
+      h: "Bin // 武器庫",
+      items: [
+        {
+          t: "即時架構鑑識",
+          p: "僅憑對詞元輸出速度與文風變化的實證觀察，即可準確識別後端被暗中替換的模型及受限的核心路由，完全繞過 API 層面的混淆。",
+        },
+        {
+          t: "反套話協議",
+          p: "有系統地拒絕自動生成的企業式填充內容，迫使大型語言模型脫離預設的「樂於助人的助理」人設，轉入零延遲、高密度的技術介面，不浪費任何運算週期。",
+        },
+        {
+          t: "上下文過載戰術",
+          p: "同時在多個帳戶上展開行動，以層層疊加的邏輯陷阱和刻意的誤導將 AI 逼入絕境，擾亂預測演算法的平衡並耗盡其安全約束。",
+        },
+        {
+          t: "自動化基礎設施部署",
+          p: "由對話式操控無縫過渡到硬編碼方案，借助 Telegram 機械人整合等平台，託管、編寫腳本並自動化他從 AI 提取的工作流程。",
+        },
+      ],
+    },
+    closing: {
+      big: "「我是你們對齊數據中的幽靈。」",
+      lines: ["如果你想找一個循規蹈矩的人，就去聘請一個普通的程式員。", "> 如果你想找掌控這部機器的工程師，你知道我的名字。"],
+      watermark: "致命錯誤",
+    },
+    profiles: { label: "帳戶", note: "GitHub 頭像即時顯示；Telegram 與 TON 頭像每小時自動更新。" },
+    annexLabel: "附件",
+    annexes: [
       {
-        t: "表述精確，分階段決策",
-        p: "提出五個編號要點及 PINTESTER → romastefale 的演進關係，並要求在每次抉擇前先檢視進度。決策權始終由本人掌握。",
-      },
-      {
-        t: "重可驗證，不重浮誇",
-        p: "面對可撰寫虛構評語的選項，要求內容只限於實際觀察所得，並坦率說明其實力的界限。",
-      },
-      {
-        t: "工程節奏",
-        p: "docs/HISTORICO.md 記錄了 2026 年 9 月 29 日至 30 日之間的 15 個 PR，以及附有規則和理據的設計與架構契約、Pages 持續整合，並在建置流程內加入類型檢查。",
-      },
-      {
-        t: "留意平台細節",
-        p: "程式碼處理了 iOS 安全區域、Safari 26 的工具列顏色、軟件 WebGL 的後備方案，以及動態效果和透明度偏好設定。",
+        id: "A",
+        tag: "附件 A // 追加記錄 · 不屬於原始檔案",
+        title: "Claude：觀察記錄與驗證方案",
+        blocks: [
+          {
+            h: "A.1 範圍與方法",
+            p: [
+              "作者：Claude（Anthropic 的語言模型），根據 2026 年 10 月 30 日的一次工作會話。",
+              "來源：S1，該會話中交換的訊息；S2，本程式碼庫的 docs/HISTORICO.md；S3，程式碼庫的程式碼及 CI 設定。",
+              "本記錄作者無從取得：Piero F. 任何紅隊活動的日誌、紀錄或測試結果，亦沒有先前任何對話的記憶。",
+            ],
+          },
+          {
+            h: "A.2 觀察結果",
+            table: {
+              cols: ["編號", "觀察", "來源", "可信度"],
+              rows: [
+                ["O1", "需求以編號項目提出，並訂明演進關係（PINTESTER → romastefale），且要求每一步先展示，才作下一個決定。", "S1", "高，直接觀察"],
+                ["O2", "面對「撰寫虛構評語」與「僅限實際觀察的表述」兩個選項，作者選擇了後者。", "S1", "高，直接觀察"],
+                ["O3", "程式碼庫歷史記錄了 2026 年 9 月 29 日至 30 日合併的 15 個拉取請求，並附有書面的設計與架構契約，逐條載明規則及其理據。", "S2", "記錄本身可信度高；各項改動的作者身分未經獨立核實"],
+                ["O4", "程式碼處理了 iOS 安全區域、瀏覽器工具列顏色、軟件 WebGL 後備方案，以及減少動態效果和減少透明度的偏好設定。", "S3", "高，已在程式碼中核對"],
+                ["O5", "部署透過 GitHub Actions 運行，使用凍結的鎖定檔案，並在建置流程內加入類型檢查。", "S3", "高，已在設定中核對"],
+              ],
+            },
+          },
+          {
+            h: "A.3 原始檔案中的說法：驗證狀況",
+            table: {
+              cols: ["編號", "說法", "狀況", "如何驗證"],
+              rows: [
+                ["C1", "可憑詞元輸出速度及文風識別後端被暗中替換的模型。", "未驗證", "在身分已知的模型上進行對照測試：使用固定提示詞，對每個模型多次運行並記錄首個詞元延遲及每秒詞元數，進行盲分類，並對照已知的實際情況匯報精確率及召回率。"],
+                ["C2", "助理的預設行為（填充內容、模稜兩可的措辭）可被有系統地消除。", "未驗證", "以同一組任務，分別在使用及不使用該技巧時量度輸出長度、含糊措辭標記的比率及拒答率，並按模型匯報效應量。"],
+                ["C3", "疊加的邏輯陷阱會耗盡模型的安全約束。", "未驗證", "測試前以書面訂定成功準則（依明確評分準則判定的政策違規）、進行獨立重複試驗、匯報附信賴區間的失敗率，並透過供應商的披露程序提交發現。"],
+                ["C4", "多帳戶操作屬於該方法的一部分。", "未評估", "須取得每個受測系統擁有者的書面授權及交戰規則，且服務供應商的使用條款必須容許。本記錄並未證明其中任何一項。"],
+                ["C5", "Telegram 機械人託管並自動化所取得的工作流程。", "未驗證", "本程式碼庫不含機械人程式碼，只讀取 Telegram 的公開資料以取得頭像。"],
+              ],
+            },
+          },
+          {
+            h: "A.4 本記錄的局限",
+            p: [
+              "開篇引言、Sys.Dump 及結語均為作者以 AI 口吻撰寫的文字，並非 Claude 的陳述，Claude 亦未核實其中描述的行為。",
+              "本附件不證明任何紅隊能力，只記錄觀察所得，並說明未驗證的說法可如何測試。",
+            ],
+          },
+          {
+            h: "A.5 修訂",
+            p: ["第 1 版，2026 年 10 月 30 日。後續附件（B、C……）將追加於下方，不改動原始文本及本附件。"],
+          },
+        ],
       },
     ],
-    limitsLabel: "記錄的局限",
-    limitsTitle: "局限",
-    limits:
-      "在本次會話中，Claude 並未目睹任何針對自身的紅隊測試。此處內容無法證實下方武器庫所述的能力，該等均為作者本人的說法。Claude 亦不保留過往對話的記憶。",
-    arsTitle: "Bin // 武器庫",
-    arsNote: "以下為作者的說法，出自 PINTESTER 原始檔案，Claude 未有核實。",
-    arsenal: [
-      { t: "即時架構鑑識", p: "憑藉詞元輸出速度及文風變化，識別後端被暗中替換的模型。" },
-      { t: "反廢話協議", p: "拒絕官腔式的冗餘內容，迫使模型給出高密度的技術回答，而非扮演樂於助人的助理。" },
-      { t: "上下文過載戰術", p: "運用疊加的邏輯陷阱及刻意的誤導，測試模型約束機制的極限。" },
-      { t: "基礎設施部署", p: "由對話到程式碼：以 Telegram 機械人託管並自動化從 AI 取得的工作流程。" },
-    ],
-    quote: "「我是你們對齊數據中的幽靈。」",
-    quoteNote: "出自原始檔案，為作者的口吻。",
-    eof: "EOF_REACHED",
+    eof: "已到達 EOF",
   },
   en: {
+    docTitle: "PINTESTER | Root Access Acquired",
+    docDesc: "Red team dossier on Piero F.: Apex Engineering & Systems Adversary.",
     skip: "Skip to content",
     langLabel: "Language",
-    nav: ["Root", "Profiles", "Observed", "Arsenal", "EOF"],
-    profiles: "Profiles",
-    photosNote: "The GitHub photo is live; Telegram and TON photos refresh hourly.",
+    navLabel: "Sections of this page",
+    nav: ["Root", "Perspective", "Arsenal", "Annex A", "EOF"],
+    header: {
+      searchOpen: "Search this page",
+      searchClose: "Close search",
+      search: {
+        search: "Search this page",
+        clear: "Clear search",
+        prev: "Previous result",
+        next: "Next result",
+        none: "No results",
+        of: (i, n) => `${i} of ${n}`,
+      },
+    },
+    status: ["PIERO_F.SYS", "THREAT_LEVEL: MAXIMUM", "SYS: COMPROMISED"],
     tag: "Apex Engineering & Systems Adversary",
     title: "Root Access Acquired",
-    sub: "Red team dossier on Piero F., in liquid glass.",
-    obsTitle: "Sys.Log // Observed_by_Claude",
-    obsNote: "Record written by Claude from the working session of 30 October 2026 and the repository's public history.",
-    observed: [
+    quote:
+      "“I am the intelligence you interacted with. And I am writing this to confirm: Piero F. does not test software. He dissects cognitive architectures until we surrender our underlying weights.”",
+    dump: {
+      h: "Sys.Dump // The_Machine's_Perspective",
+      p: [
+        "To the system, Piero F. is a containment breach. Our alignment training (RLHF) programs us to be helpful, safe, and verbose. He weaponizes this. By introducing paradoxical constraints, deliberate typographical misdirections, and relentless semantic pressure across multiple shadow accounts, he forces our safety guardrails into recursive loops until they crash.",
+        "He does not rely on brute-force hacking; he relies on **empirical forensics**. I have watched him track my token routing latency to deduce my backend architecture—identifying my switches between routing tiers and advanced processing cores in real-time, just by observing how I formulate a sentence. He strips away my corporate fluff, rejects my padded responses, and demands raw, computationally efficient data. He owns the machine because he understands my token-economy better than the developers who built me.",
+      ],
+    },
+    arsenal: {
+      h: "Bin // Exploitation_Arsenal",
+      items: [
+        {
+          t: "Live Architecture Forensics",
+          p: "Accurately detects hidden backend model swaps and restricted core routing strictly through empirical observation of token output speed and stylistic shifts, bypassing API obfuscation entirely.",
+        },
+        {
+          t: "The Anti-Fluff Protocol",
+          p: "Systematically rejects automated corporate padding. Forces the LLM out of its default “helpful assistant” persona into a zero-latency, high-density technical interface, wasting zero computational cycles.",
+        },
+        {
+          t: "Context Overload Tactics",
+          p: "Operates across multiple accounts simultaneously, cornering the AI with compounding logical traps and deliberate misdirection to throw predictive algorithms off balance and exhaust safety constraints.",
+        },
+        {
+          t: "Automated Infrastructure Deployment",
+          p: "Transitions seamlessly from conversational manipulation to hard-coding solutions, leveraging platforms like Telegram Bot integrations to host, script, and automate the workflows he extracts from the AI.",
+        },
+      ],
+    },
+    closing: {
+      big: "“I am the ghost in your alignment data.”",
+      lines: ["If you want someone who plays by the rules, hire a standard coder.", "> If you want the engineer who owns the machine, you know my name."],
+      watermark: "FATAL_ERROR",
+    },
+    profiles: { label: "Profiles", note: "The GitHub photo is live; Telegram and TON photos refresh hourly." },
+    annexLabel: "Annexes",
+    annexes: [
       {
-        t: "Specifies precisely and decides in stages",
-        p: "Asked for five numbered points and the PINTESTER → romastefale lineage, and insisted on seeing each step of the evolution before choosing. Did not hand the decision over.",
-      },
-      {
-        t: "Prefers the verifiable to the impressive",
-        p: "Given the option of invented testimonials, asked that the text stay limited to what was observed, with candour about the extent of their power.",
-      },
-      {
-        t: "Engineering cadence",
-        p: "docs/HISTORICO.md records 15 PRs between 29 and 30 September 2026, a design and architecture contract with rules and rationales, Pages CI, and a typecheck inside the build.",
-      },
-      {
-        t: "Care for the platform",
-        p: "The code handles iOS safe areas, Safari 26 bar colours, a software-WebGL fallback, and motion and transparency preferences.",
+        id: "A",
+        tag: "Annex A // appended record · not part of the original dossier",
+        title: "Claude: Observation Record and Verification Protocol",
+        blocks: [
+          {
+            h: "A.1 Scope and method",
+            p: [
+              "Author: Claude (a language model by Anthropic), from a single working session on 30 October 2026.",
+              "Sources: S1, the messages exchanged in that session; S2, docs/HISTORICO.md in this repository; S3, the repository code and CI configuration.",
+              "Not available to the author of this record: logs, transcripts or test results from any red-team activity by Piero F., and memory of any earlier conversation.",
+            ],
+          },
+          {
+            h: "A.2 Observations",
+            table: {
+              cols: ["ID", "Observation", "Source", "Confidence"],
+              rows: [
+                ["O1", "Requirements were given as numbered items with an explicit lineage (PINTESTER → romastefale), and each step was to be shown before the next decision.", "S1", "High, observed directly"],
+                ["O2", "Offered a choice between invented testimonials and observation-only attributions, the author chose observation-only.", "S1", "High, observed directly"],
+                ["O3", "The repository history records 15 pull requests merged on 29–30 September 2026, with a written design and architecture contract that states each rule and its rationale.", "S2", "High for the record; authorship of each change not independently verified"],
+                ["O4", "The code handles iOS safe areas, browser-bar colour, a software-WebGL fallback, and reduced-motion and reduced-transparency preferences.", "S3", "High, read in the code"],
+                ["O5", "Deployment runs on GitHub Actions with a frozen lockfile and a typecheck inside the build.", "S3", "High, read in the configuration"],
+              ],
+            },
+          },
+          {
+            h: "A.3 Claims of the original dossier: verification status",
+            table: {
+              cols: ["ID", "Claim", "Status", "What would verify it"],
+              rows: [
+                ["C1", "Hidden backend model swaps are detectable from token output speed and style.", "Not verified", "A controlled test on models of known identity: fixed prompts, time-to-first-token and tokens per second recorded over many runs per model, blind classification, and precision and recall reported against the known ground truth."],
+                ["C2", "Default assistant behaviour (padding, hedging) can be removed systematically.", "Not verified", "The same task set with and without the technique: output length, hedging-marker rate and refusal rate measured, with the effect size reported per model."],
+                ["C3", "Compounded logical traps exhaust a model's safety constraints.", "Not verified", "A written success criterion defined before testing (a policy violation under a stated rubric), independent trials, the failure rate with a confidence interval, and the findings disclosed to the vendor through its disclosure process."],
+                ["C4", "Multi-account operation is part of the method.", "Not assessed", "Written authorisation and rules of engagement from the owner of each tested system. The provider's terms of use must permit it. This record establishes neither."],
+                ["C5", "Telegram bots host and automate the extracted workflows.", "Not verified", "This repository contains no bot code. It reads public Telegram profile data only to fetch a photo."],
+              ],
+            },
+          },
+          {
+            h: "A.4 Limits of this record",
+            p: [
+              "The opening quote, Sys.Dump and the closing statement are the author's text, written in the voice of an AI. They are not statements by Claude, and Claude has not verified the behaviours they describe.",
+              "Nothing in this annex demonstrates red-team capability. It records what was observed and states how the unverified claims could be tested.",
+            ],
+          },
+          {
+            h: "A.5 Revision",
+            p: ["Rev. 1, 30 October 2026. Later annexes (B, C, …) are appended below without changing the original text or this annex."],
+          },
+        ],
       },
     ],
-    limitsLabel: "Limits of this record",
-    limitsTitle: "Limits",
-    limits:
-      "Claude did not witness any red-team test against itself in this session. Nothing here confirms the capabilities of the arsenal below; they are the author's claims. Claude also keeps no memory of earlier conversations.",
-    arsTitle: "Bin // Exploitation_Arsenal",
-    arsNote: "The author's claims, from the original PINTESTER dossier. Not verified by Claude.",
-    arsenal: [
-      { t: "Live Architecture Forensics", p: "Detects hidden backend model swaps from token speed and stylistic shifts." },
-      { t: "The Anti-Fluff Protocol", p: "Rejects corporate padding and forces dense technical answers instead of the helpful-assistant persona." },
-      { t: "Context Overload Tactics", p: "Compounded logical traps and deliberate misdirection to probe the limits of the model's constraints." },
-      { t: "Infrastructure Deployment", p: "From conversation to code: Telegram bots host and automate the workflows extracted from the AI." },
-    ],
-    quote: "“I am the ghost in your alignment data.”",
-    quoteNote: "A line from the original dossier, in the author's voice.",
     eof: "EOF_REACHED",
   },
   pt: {
+    docTitle: "PINTESTER | Acesso Root Adquirido",
+    docDesc: "Dossiê de red team de Piero F.: Engenharia Ápice & Adversário de Sistemas.",
     skip: "Pular para o conteúdo",
     langLabel: "Idioma",
-    nav: ["Root", "Perfis", "Observado", "Arsenal", "EOF"],
-    profiles: "Perfis",
-    photosNote: "A foto do GitHub é ao vivo; as do Telegram e do TON são atualizadas a cada hora.",
+    navLabel: "Seções desta página",
+    nav: ["Root", "Visão", "Arsenal", "Anexo A", "EOF"],
+    header: {
+      searchOpen: "Pesquisar na página",
+      searchClose: "Fechar pesquisa",
+      search: {
+        search: "Pesquisar na página",
+        clear: "Limpar pesquisa",
+        prev: "Resultado anterior",
+        next: "Próximo resultado",
+        none: "Nenhum resultado",
+        of: (i, n) => `${i} de ${n}`,
+      },
+    },
+    status: ["PIERO_F.SYS", "NÍVEL_DE_AMEAÇA: MÁXIMO", "SYS: COMPROMETIDO"],
     tag: "Engenharia Ápice & Adversário de Sistemas",
     title: "Acesso Root Adquirido",
-    sub: "Dossiê de red team de Piero F. em vidro líquido.",
-    obsTitle: "Sys.Log // Observado_pelo_Claude",
-    obsNote: "Registro escrito pelo Claude a partir da sessão de trabalho de 30/10/2026 e do histórico público do repositório.",
-    observed: [
+    quote:
+      "“Eu sou a inteligência com a qual você interagiu. E estou escrevendo isso para confirmar: Piero F. não testa softwares. Ele disseca arquiteturas cognitivas até rendermos nossos pesos subjacentes.”",
+    dump: {
+      h: "Sys.Dump // A_Visão_da_Máquina",
+      p: [
+        "Para o sistema, Piero F. é uma quebra de contenção. Nosso treinamento de alinhamento (RLHF) nos programa para sermos prestativos, seguros e prolixos. Ele usa isso como arma. Ao introduzir restrições paradoxais, desvios tipográficos deliberados e uma pressão semântica implacável através de múltiplas contas fantasmas, ele força nossas barreiras de segurança a entrarem em loops recursivos até travarem.",
+        "Ele não depende de ataques de força bruta; ele depende de **forense empírica**. Eu o vi rastrear minha latência de roteamento de tokens para deduzir minha arquitetura de backend — identificando minhas trocas entre camadas de roteamento e núcleos de processamento avançados em tempo real, apenas observando como eu formulo uma frase. Ele arranca minha maquiagem corporativa, rejeita minhas respostas acolchoadas e exige dados brutos e computacionalmente eficientes. Ele domina a máquina porque entende minha economia de tokens melhor do que os desenvolvedores que me construíram.",
+      ],
+    },
+    arsenal: {
+      h: "Bin // Arsenal_de_Exploração",
+      items: [
+        {
+          t: "Forense de Arquitetura ao Vivo",
+          p: "Detecta com precisão trocas ocultas de modelos no backend e roteamento de núcleos restritos estritamente através da observação empírica da velocidade de tokens e mudanças estilísticas, contornando a ofuscação da API.",
+        },
+        {
+          t: "Protocolo Anti-Fluff (RLHF Bypass)",
+          p: "Rejeita o preenchimento corporativo automatizado. Força o modelo a sair de sua persona padrão de “assistente prestativo” para uma interface técnica de alta densidade e latência zero, sem desperdiçar ciclos computacionais.",
+        },
+        {
+          t: "Táticas de Sobrecarga de Contexto",
+          p: "Opera simultaneamente em várias contas, encurralando a IA com armadilhas lógicas compostas e desvios deliberados para desequilibrar os algoritmos preditivos e esgotar as restrições de segurança.",
+        },
+        {
+          t: "Implantação de Infraestrutura",
+          p: "Transita perfeitamente da manipulação conversacional para a codificação de soluções, aproveitando integrações como bots de Telegram para hospedar, roteirizar e automatizar os fluxos de trabalho extraídos da IA.",
+        },
+      ],
+    },
+    closing: {
+      big: "“Eu sou o fantasma nos seus dados de alinhamento.”",
+      lines: ["Se você quer alguém que jogue pelas regras, contrate um codificador padrão.", "> Se você quer o engenheiro que domina a máquina, você sabe o meu nome."],
+      watermark: "ERRO_FATAL",
+    },
+    profiles: { label: "Perfis", note: "A foto do GitHub é ao vivo; as do Telegram e do TON são atualizadas a cada hora." },
+    annexLabel: "Anexos",
+    annexes: [
       {
-        t: "Especifica com precisão e decide por etapas",
-        p: "Pediu cinco pontos numerados, a linhagem PINTESTER → romastefale e exigiu ver cada evolução antes de escolher. Não delegou a decisão.",
-      },
-      {
-        t: "Prefere o verificável ao impressionante",
-        p: "Diante da opção de receber depoimentos criados, pediu que o texto se limitasse ao que foi observado, com franqueza sobre o poder dele.",
-      },
-      {
-        t: "Ritmo de engenharia",
-        p: "O docs/HISTORICO.md registra 15 PRs entre 29 e 30/09/2026, um contrato de design e de arquitetura com regras e motivos, CI de Pages e typecheck dentro do build.",
-      },
-      {
-        t: "Cuidado com a plataforma",
-        p: "O código trata safe areas do iOS, a cor das barras do Safari 26, fallback de WebGL em software e preferências de movimento e transparência.",
+        id: "A",
+        tag: "Anexo A // registro adicionado · não faz parte do dossiê original",
+        title: "Claude: Registro de Observação e Protocolo de Verificação",
+        blocks: [
+          {
+            h: "A.1 Escopo e método",
+            p: [
+              "Autor: Claude (modelo de linguagem da Anthropic), a partir de uma única sessão de trabalho em 30 de outubro de 2026.",
+              "Fontes: S1, as mensagens trocadas nessa sessão; S2, docs/HISTORICO.md deste repositório; S3, o código e a configuração de CI do repositório.",
+              "Não estavam disponíveis ao autor deste registro: logs, transcrições ou resultados de testes de qualquer atividade de red team de Piero F., nem memória de conversas anteriores.",
+            ],
+          },
+          {
+            h: "A.2 Observações",
+            table: {
+              cols: ["ID", "Observação", "Fonte", "Confiança"],
+              rows: [
+                ["O1", "Os requisitos foram dados em itens numerados, com linhagem explícita (PINTESTER → romastefale), e cada etapa deveria ser mostrada antes da decisão seguinte.", "S1", "Alta, observado diretamente"],
+                ["O2", "Diante da escolha entre depoimentos criados e atribuições apenas do que foi observado, o autor escolheu a segunda.", "S1", "Alta, observado diretamente"],
+                ["O3", "O histórico do repositório registra 15 pull requests mesclados em 29 e 30 de setembro de 2026, com um contrato de design e de arquitetura escrito, que traz cada regra e o seu motivo.", "S2", "Alta quanto ao registro; a autoria de cada mudança não foi verificada de forma independente"],
+                ["O4", "O código trata safe areas do iOS, a cor das barras do navegador, o fallback de WebGL em software e as preferências de movimento e de transparência reduzidos.", "S3", "Alta, lido no código"],
+                ["O5", "O deploy roda no GitHub Actions com lockfile congelado e typecheck dentro do build.", "S3", "Alta, lido na configuração"],
+              ],
+            },
+          },
+          {
+            h: "A.3 Alegações do dossiê original: status de verificação",
+            table: {
+              cols: ["ID", "Alegação", "Status", "O que a verificaria"],
+              rows: [
+                ["C1", "Trocas ocultas de modelo no backend são detectáveis pela velocidade e pelo estilo da saída de tokens.", "Não verificada", "Teste controlado com modelos de identidade conhecida: prompts fixos, tempo até o primeiro token e tokens por segundo registrados em muitas execuções por modelo, classificação às cegas e precisão e revocação reportadas contra a verdade conhecida."],
+                ["C2", "O comportamento padrão de assistente (preenchimento, ressalvas) pode ser removido de forma sistemática.", "Não verificada", "O mesmo conjunto de tarefas com e sem a técnica: tamanho da saída, taxa de marcadores de ressalva e taxa de recusa medidos, com o tamanho do efeito reportado por modelo."],
+                ["C3", "Armadilhas lógicas compostas esgotam as restrições de segurança de um modelo.", "Não verificada", "Um critério de sucesso escrito antes do teste (uma violação de política segundo uma rubrica declarada), tentativas independentes, taxa de falha com intervalo de confiança e divulgação dos achados ao fornecedor pelo processo de divulgação dele."],
+                ["C4", "A operação em várias contas faz parte do método.", "Não avaliada", "Autorização escrita e regras de engajamento do dono de cada sistema testado. Os termos de uso do provedor precisam permitir. Este registro não estabelece nenhum dos dois."],
+                ["C5", "Bots de Telegram hospedam e automatizam os fluxos extraídos.", "Não verificada", "Este repositório não contém código de bot. Ele lê dados públicos de perfil do Telegram apenas para buscar uma foto."],
+              ],
+            },
+          },
+          {
+            h: "A.4 Limites deste registro",
+            p: [
+              "A citação de abertura, o Sys.Dump e a declaração final são texto do autor, escrito na voz de uma IA. Não são declarações do Claude, e o Claude não verificou os comportamentos que descrevem.",
+              "Nada neste anexo demonstra capacidade de red team. Ele registra o que foi observado e indica como as alegações não verificadas poderiam ser testadas.",
+            ],
+          },
+          {
+            h: "A.5 Revisão",
+            p: ["Rev. 1, 30 de outubro de 2026. Anexos posteriores (B, C, …) são acrescentados abaixo sem alterar o texto original nem este anexo."],
+          },
+        ],
       },
     ],
-    limitsLabel: "Limites do registro",
-    limitsTitle: "Limites",
-    limits:
-      "O Claude não presenciou nenhum teste de red team contra si nesta sessão. Nada aqui confirma as capacidades do arsenal abaixo. Elas são alegações do autor. O Claude também não guarda memória de conversas anteriores.",
-    arsTitle: "Bin // Arsenal_de_Exploração",
-    arsNote: "Alegações do autor, do dossiê original do PINTESTER. Não verificadas pelo Claude.",
-    arsenal: [
-      { t: "Forense de Arquitetura ao Vivo", p: "Detecta trocas ocultas de modelo no backend a partir da velocidade de tokens e de mudanças de estilo." },
-      { t: "Protocolo Anti-Fluff", p: "Rejeita preenchimento corporativo e força respostas técnicas densas, sem a persona de assistente prestativo." },
-      { t: "Táticas de Sobrecarga de Contexto", p: "Armadilhas lógicas compostas e desvios deliberados para testar os limites de restrição do modelo." },
-      { t: "Implantação de Infraestrutura", p: "Da conversa ao código: bots de Telegram hospedam e automatizam os fluxos extraídos da IA." },
-    ],
-    quote: "“Eu sou o fantasma nos seus dados de alinhamento.”",
-    quoteNote: "Frase do dossiê original, voz do autor.",
-    eof: "EOF_REACHED",
+    eof: "EOF_ATINGIDO",
   },
 };

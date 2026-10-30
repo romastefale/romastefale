@@ -3,7 +3,7 @@ import { flushSync } from "react-dom";
 import { FROST } from "../lib/optics";
 import { useReducedMotion } from "../lib/useMedia";
 import { useTheme } from "../lib/theme";
-import { Magnifier, PageSearch } from "./PageSearch";
+import { Magnifier, PageSearch, SEARCH_PT, type SearchLabels } from "./PageSearch";
 import { Frost } from "./Frost";
 import { PAGES, type PageKey } from "../lib/pages";
 import "./SiteHeader.css";
@@ -38,6 +38,14 @@ const Moon = () => (
 
 const EDGE = 12;
 
+/** The header's own strings (Portuguese by default), for pages in another language. */
+export interface HeaderLabels {
+  searchOpen: string;
+  searchClose: string;
+  search: SearchLabels;
+}
+const HEADER_PT: HeaderLabels = { searchOpen: "Pesquisar na página", searchClose: "Fechar pesquisa", search: SEARCH_PT };
+
 export const SiteHeader: React.FC<{
   items: NavItem[];
   current: PageKey;
@@ -45,12 +53,17 @@ export const SiteHeader: React.FC<{
   searchScope?: string;
   /** Pages with a single fixed theme (PINTESTER is dark only) drop the toggle and its slot. */
   hideTheme?: boolean;
+  /** A single-page site has nothing to pick: drop the ☰ button and its list. */
+  hidePicker?: boolean;
+  labels?: HeaderLabels;
 }> = ({
   items,
   current,
   label = "Seções desta página",
   searchScope = "conteudo",
   hideTheme = false,
+  hidePicker = false,
+  labels = HEADER_PT,
 }) => {
   const { theme, toggle } = useTheme();
   const dark = theme === "dark";
@@ -290,32 +303,34 @@ export const SiteHeader: React.FC<{
   return (
     <>
       <div className="sh-band" aria-hidden="true" />
-      <Frost
-        className="sh-glass sh-glass-pages"
-        optics={FROST}
-        data-hidden={searchOpen || undefined}
-      >
-        <button
-          ref={pickerBtn}
-          type="button"
-          className="sh-btn"
-          onClick={() => (pickerOpen ? closePicker() : setPickerOpen(true))}
-          aria-label={pickerOpen ? "Fechar lista de páginas" : "Abrir lista de páginas"}
-          aria-expanded={pickerOpen}
-          aria-controls={pickerId}
-          title="Páginas"
-          inert={searchOpen}
+      {!hidePicker && (
+        <Frost
+          className="sh-glass sh-glass-pages"
+          optics={FROST}
+          data-hidden={searchOpen || undefined}
         >
-          <Burger />
-        </button>
-      </Frost>
+          <button
+            ref={pickerBtn}
+            type="button"
+            className="sh-btn"
+            onClick={() => (pickerOpen ? closePicker() : setPickerOpen(true))}
+            aria-label={pickerOpen ? "Fechar lista de páginas" : "Abrir lista de páginas"}
+            aria-expanded={pickerOpen}
+            aria-controls={pickerId}
+            title="Páginas"
+            inert={searchOpen}
+          >
+            <Burger />
+          </button>
+        </Frost>
+      )}
       <Frost
         className="site-header"
         optics={FROST}
         data-mode={searchOpen ? "search" : "menu"}
       >
         <header ref={barRef} className="sh-bar">
-          <span className="sh-slot" />
+          {!hidePicker && <span className="sh-slot" />}
           <nav
             ref={navRef}
             className="sh-nav"
@@ -348,7 +363,7 @@ export const SiteHeader: React.FC<{
               </a>
             ))}
           </nav>
-          <PageSearch open={searchOpen} id={searchId} scopeId={searchScope} inputRef={searchInput} onClose={closeSearch} />
+          <PageSearch open={searchOpen} id={searchId} scopeId={searchScope} inputRef={searchInput} onClose={closeSearch} labels={labels.search} />
           <div className="sh-actions">
             {!hideTheme && <span className="sh-slot" />}
             <span className="sh-slot" />
@@ -380,45 +395,47 @@ export const SiteHeader: React.FC<{
           type="button"
           className="sh-btn"
           onClick={() => (searchOpen ? closeSearch() : openSearch())}
-          aria-label={searchOpen ? "Fechar pesquisa" : "Pesquisar na página"}
+          aria-label={searchOpen ? labels.searchClose : labels.searchOpen}
           aria-expanded={searchOpen}
           aria-controls={searchId}
-          title={searchOpen ? "Fechar pesquisa" : "Pesquisar na página"}
+          title={searchOpen ? labels.searchClose : labels.searchOpen}
         >
           <Magnifier />
         </button>
       </Frost>
-      <Frost
-        className="sh-picker"
-        optics={FROST}
-        data-open={pickerOpen || undefined}
-        inert={!pickerOpen}
-      >
-        <nav ref={pickerRef} id={pickerId} aria-label="Páginas do site">
-          <ul>
-            {PAGES.map((p) => {
-              const here = p.key === current;
-              return (
-                <li key={p.key}>
-                  <a
-                    href={p.href}
-                    aria-current={here ? "page" : undefined}
-                    onClick={(e) => {
-                      if (here) {
-                        e.preventDefault();
-                        closePicker();
-                      } else setPickerOpen(false);
-                    }}
-                  >
-                    <span className="sh-pick-title">{p.pick}</span>
-                    <span className="sh-pick-here">{here && <Check />}</span>
-                  </a>
-                </li>
-              );
-            })}
-          </ul>
-        </nav>
-      </Frost>
+      {!hidePicker && (
+        <Frost
+          className="sh-picker"
+          optics={FROST}
+          data-open={pickerOpen || undefined}
+          inert={!pickerOpen}
+        >
+          <nav ref={pickerRef} id={pickerId} aria-label="Páginas do site">
+            <ul>
+              {PAGES.map((p) => {
+                const here = p.key === current;
+                return (
+                  <li key={p.key}>
+                    <a
+                      href={p.href}
+                      aria-current={here ? "page" : undefined}
+                      onClick={(e) => {
+                        if (here) {
+                          e.preventDefault();
+                          closePicker();
+                        } else setPickerOpen(false);
+                      }}
+                    >
+                      <span className="sh-pick-title">{p.pick}</span>
+                      <span className="sh-pick-here">{here && <Check />}</span>
+                    </a>
+                  </li>
+                );
+              })}
+            </ul>
+          </nav>
+        </Frost>
+      )}
     </>
   );
 };

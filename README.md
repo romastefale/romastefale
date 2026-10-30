@@ -6,7 +6,7 @@ App React 19 (Vite + TypeScript) com vidro líquido da biblioteca [`@samasante/l
 
 | Página | Endereço | O que mostra |
 |---|---|---|
-| Início | [`/romastefale/`](https://romastefale.github.io/romastefale/) | o portal: cartões das páginas, feed de vidro fosco e fotos |
+| Início (PINTESTER) | [`/romastefale/`](https://romastefale.github.io/romastefale/) | o dossiê de red team em vidro líquido preto e vermelho, em mandarim (abre primeiro), cantonês de Hong Kong, inglês e português, com o texto original e o Anexo A |
 | Amostra | [`liquid-glass-sample.html`](https://romastefale.github.io/romastefale/liquid-glass-sample.html) | lente no lugar sobre o título, cartões com `refract` e botões materiais |
 | Painel | [`painel.html`](https://romastefale.github.io/romastefale/painel.html) | segmentado com lente, widgets com `refract` sobre a foto, chaves e controle deslizante de vidro, avisos e barra de abas |
 | Galeria | [`galeria.html`](https://romastefale.github.io/romastefale/galeria.html) | visor em WebGL em que cada controle é uma lente, chips de filtro e uma folha com lupa |
@@ -14,7 +14,7 @@ App React 19 (Vite + TypeScript) com vidro líquido da biblioteca [`@samasante/l
 | Contrato de design | [`contrato-design.html`](https://romastefale.github.io/romastefale/contrato-design.html) | `docs/` README, DESIGN-CONTRATO, TELA-CHEIA-E-BARRAS e ACESSIBILIDADE, com fotos de skylines |
 | Arquitetura e operação | [`contrato-arquitetura.html`](https://romastefale.github.io/romastefale/contrato-arquitetura.html) | `docs/` ARQUITETURA, DESEMPENHO, DEPLOY, CHECKLIST e HISTORICO, com fotos de skylines |
 
-Todas compartilham:
+As outras seis páginas são o template (herdado do projeto HTML) e continuam publicadas pelo endereço direto; o Início não linka para elas. As páginas do template compartilham:
 
 - um menu flutuante em forma de pílula de vidro: o botão ☰ na ponta esquerda, que abre a lista de todas as páginas (o Início também), e depois só as seções da página;
 - a pesquisa na página, que abre pela lupa;
@@ -41,7 +41,9 @@ O relato técnico e o **contrato para projetos futuros** estão em [`docs/`](doc
 - `src/components/PageSearch.tsx`: a pesquisa dentro da pílula (CSS Custom Highlight API, com fallback).
 - `src/components/Frost.tsx`, `GlassPill.tsx` e `Surfaces.tsx`: as superfícies de vidro e as fotos responsivas.
 - `src/components/examples/`: `GlassSwitch` e `GlassSlider`, copiados do `examples/` do fork (MIT).
-- `src/pages/`: as páginas (`Home`, `Sample`, `Painel`, `Galeria`, `Fundo` e `Docs`, que renderiza os documentos).
+- `src/pages/Pintester.tsx` e `src/lib/pintester-i18n.ts`: o Início. Todo texto, rótulo de acessibilidade, título da aba e descrição vêm de `COPY` em `pintester-i18n.ts`, nos quatro idiomas. Um anexo novo entra acrescentando um item a `annexes` em cada idioma.
+- `scripts/fetch-avatars.mjs`: baixa as fotos de perfil antes do build (o workflow roda também a cada hora).
+- `src/pages/`: as demais páginas ( `Sample`, `Painel`, `Galeria`, `Fundo` e `Docs`, que renderiza os documentos).
 - `src/components/AnimatedBackground.tsx`: o fundo animado do Fundo animado (sete elipses translúcidas com desfoque gaussiano calculado, em WebGL), atrás do conteúdo e acima do fundo estático.
 - `src/lib/device.ts`: medidas, pausa fora da tela, montagem adiada e detecção de WebGL em software.
 - `src/styles/global.css`: o fundo orgânico (`src/assets/fundo-*.svg`, gerados por `scripts/make-organic-bg.py`), as camadas de borda, as tintas e o foco.

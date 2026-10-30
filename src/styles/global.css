@@ -1,0 +1,204 @@
+/* Shared look for both pages. Edges come from the glass itself: frost and a
+   translucent tint, the same treatment as the top bar, plus a soft float
+   shadow. There is no drawn line on the glass.
+
+   ── Browser top/bottom bars (Safari 26 / iOS 26, Android Chrome) ──────────
+   • The page background (html::before, a fixed, viewport-tall static SVG of
+     blurred organic colour fields) STARTS and ENDS on --page-edge, and the
+     canvas colour (body background-color, propagated) is --page-edge too (also
+     set inline in the HTML head, so it holds before this file loads and in the
+     rubber-band overscroll).
+   • Safari 26 can cache the sampled browser-bar tint across a theme change.
+     A real, empty .safari-chrome-sample element is inserted by src/lib/theme.ts.
+     Its solid background-color follows --page-edge, but background-clip:text
+     prevents it from painting visible pixels. The theme code changes its height
+     from 11px to 12px and back to prompt a fresh sample. This relies on a
+     reverse-engineered Safari 26 behaviour, not a public browser API.
+   • The visual menu band (.sh-band in SiteHeader.css) remains inset below the
+     safe area and keeps its blur; it is not the browser-colour sampler.
+   • theme-color (Android Chrome and browsers that honour it) remains aligned
+     with --page-edge for the selected theme.
+*/
+:root{
+  --page-edge:#8b82e6;
+  --page-bg:url("../assets/fundo-claro.svg");
+  /* The cards band's own smooth multi-colour field (the cards refract a copy). */
+  --band-bg:
+    radial-gradient(70% 90% at 0% 0%, #ffb3d9 0%, rgba(255,179,217,0) 70%),
+    radial-gradient(70% 90% at 100% 0%, #9ecbff 0%, rgba(158,203,255,0) 70%),
+    radial-gradient(70% 90% at 100% 100%, #c9a4ff 0%, rgba(201,164,255,0) 70%),
+    radial-gradient(70% 90% at 0% 100%, #8ff0d0 0%, rgba(143,240,208,0) 70%),
+    radial-gradient(50% 60% at 50% 50%, #ffe1a8 0%, rgba(255,225,168,0) 75%),
+    linear-gradient(135deg, #fbe3f1 0%, #e4dcff 100%);
+  --band-edge:#eadcf6;
+  --fade-top:64px; /* top fade continues from the safe area into the page */
+  --text:#1c1c1e;
+  --text-dim:#3a3a3c;
+  --faint:#5d5b6e;
+  --link:#0a6cff;
+  --bar-text:#0a0b0d;
+  --bar-sub:rgba(0,0,0,.6);
+  /* Keyboard focus: never blue (docs/DESIGN-CONTRATO.md N10). A neutral,
+     translucent ring in the text colour, like the selected pill's edge. */
+  --focus:rgba(28,28,30,.5);
+  --gutter-l:max(20px, env(safe-area-inset-left, 0px));
+  --gutter-r:max(20px, env(safe-area-inset-right, 0px));
+  --glass-float:0 10px 28px rgba(30,20,90,.16), 0 2px 6px rgba(30,20,90,.08);
+  /* The library's own spring curve (glassEase in @samasante/liquid-glass). */
+  --glass-ease:cubic-bezier(.34,1.36,.42,1);
+}
+:root{color-scheme:light}
+/* Dark mode follows <html data-theme> (set before first paint by the inline
+   script in each HTML head; the toggle in the top bar flips it). */
+:root[data-theme="dark"]{
+  color-scheme:dark;
+  --page-edge:#1b1646;
+  --page-bg:url("../assets/fundo-escuro.svg");
+  --text:#f5f5f7;
+  --text-dim:#d1d1d6;
+  --faint:#b3b0c8;
+  --link:#64d2ff;
+  --bar-text:#fff;
+  --bar-sub:rgba(255,255,255,.6);
+  --focus:rgba(245,245,247,.62);
+}
+*{box-sizing:border-box}
+/* html has NO background, so body's background-color becomes the canvas
+   colour (it fills the overscroll too) and html::before paints above it. */
+html{
+  touch-action:pan-x pan-y;
+  scroll-padding-top:calc(84px + env(safe-area-inset-top, 0px));
+  scroll-padding-bottom:calc(24px + env(safe-area-inset-bottom, 0px));
+}
+body{
+  margin:0;
+  /* Text wraps on every page (PR #13): long words, URLs and paths break
+     instead of overflowing; code, which has no break points, can break anywhere. */
+  overflow-wrap:break-word;
+  min-height:100vh;
+  min-height:100dvh;
+  color:var(--text);
+  background-color:var(--page-edge);
+  /* system-ui first: SF Pro on Apple, Roboto/Segoe elsewhere, and it always
+     resolves, so no missing family is looked up (docs/DESEMPENHO.md P7). */
+  font-family:system-ui,-apple-system,"Helvetica Neue",Arial,sans-serif;
+  -webkit-font-smoothing:antialiased;
+  line-height:1.5;
+  touch-action:manipulation;
+}
+/* Safari 26 browser-chrome colour sampler.
+   The matching empty DOM element is created by theme.ts. WebKit samples its
+   computed background-color; text clipping keeps that colour from being
+   visibly painted because the element contains no text. */
+.safari-chrome-sample{
+  position:fixed;
+  top:0;
+  right:0;
+  left:0;
+  z-index:2147483647;
+  height:0;
+  border:0;
+  outline:0;
+  pointer-events:none;
+  background-color:var(--page-edge);
+  background-clip:text;
+  -webkit-background-clip:text;
+  box-shadow:none;
+  transition:none;
+}
+/* Safari on touch devices needs an edge candidate taller than 10px. */
+@supports (-webkit-touch-callout:none){
+  @media (hover:none) and (pointer:coarse){
+    .safari-chrome-sample{height:11px}
+    :root[data-chrome-sample-refresh] .safari-chrome-sample{height:12px}
+  }
+}
+/* The page background: static, no animation, no JS. Fixed and one large
+   viewport tall (100lvh), so it's rasterised once and never resized when the
+   iPhone toolbars collapse; scrolling only moves the content over it. */
+html::before{
+  content:"";position:fixed;z-index:-1;left:0;right:0;top:0;height:100vh;height:100lvh;
+  pointer-events:none;
+  background:var(--page-bg) center/100% 100% no-repeat;
+}
+/* The only CSS fade is at the top. It starts in the exact solid edge colour,
+   then eases to fully transparent; the SVG already handles the bottom edge. */
+body::before{
+  content:"";position:fixed;z-index:50;left:0;right:0;top:0;
+  height:calc(env(safe-area-inset-top, 0px) + var(--fade-top));
+  pointer-events:none;
+  background:linear-gradient(180deg,
+    var(--page-edge) 0%,
+    color-mix(in srgb, var(--page-edge) 72%, transparent) 30%,
+    color-mix(in srgb, var(--page-edge) 30%, transparent) 65%,
+    transparent 100%);
+}
+a{color:inherit}
+/* <picture> is only a source picker: the <img> inside is what gets laid out. */
+picture{display:contents}
+button{font:inherit;cursor:pointer}
+:focus-visible{outline:2px solid var(--focus);outline-offset:3px;border-radius:10px}
+/* Over a photo (galeria viewer): white, the neutral that reads there. */
+:root{--focus-on-photo:rgba(255,255,255,.85)}
+code{font-family:ui-monospace,monospace;font-size:.9em} /* SF Mono in Safari; the default mono elsewhere (P7) */
+.skip{
+  position:absolute;left:12px;top:-60px;z-index:100;
+  padding:10px 14px;border-radius:12px;background:#111;color:#fff;text-decoration:none;
+}
+.skip:focus{top:calc(12px + env(safe-area-inset-top, 0px))}
+.noscript{
+  max-width:560px;margin:calc(40px + env(safe-area-inset-top, 0px)) auto;padding:22px 24px;border-radius:22px;
+  background:rgba(255,255,255,.55);box-shadow:var(--glass-float);color:#1c1c1e;
+  font:16px/1.5 -apple-system,BlinkMacSystemFont,"Helvetica Neue",Arial,sans-serif;
+}
+
+/* ── Glass surfaces: <Frost> (CSS frost) and <Glass> (@samasante/liquid-glass) ─
+   The edge is the top bar's: frost and the translucent tint. The float shadow
+   stays on the element's box-shadow. [brilho] keeps specular, sheen and glow
+   at 0, so the library draws no edge of its own. */
+.glass{box-shadow:var(--glass-float)}
+
+code,kbd{overflow-wrap:anywhere}
+/* Flex and grid children may shrink below their content, so their text wraps. */
+:where(p, li, dd, dt, h1, h2, h3, h4, figcaption){min-width:0}
+
+/* Tints: always TRANSLUCENT (the library rule: the background is the tint). */
+:root{--vidro-tint:var(--vidro-tint-claro)}
+:root[data-theme="dark"]{--vidro-tint:var(--vidro-tint-escuro)}
+.tint-ink{background:var(--tinta-ink);color:var(--tinta-ink-texto)}
+.tint-blue{background:var(--tinta-blue);color:var(--tinta-blue-texto)}
+.tint-red{background:var(--tinta-red);color:var(--tinta-red-texto)}
+.tint-green{background:var(--tinta-green);color:var(--tinta-green-texto)}
+.tint-white{background:var(--vidro-tint);color:var(--tinta-texto)}
+.tint-soft{background:var(--vidro-tint);color:var(--tinta-texto)}
+.tint-frost{background:var(--vidro-tint);color:var(--tinta-texto)}
+.tint-control{background:var(--vidro-tint);color:var(--tinta-controle)}
+.tint-bar{background:var(--vidro-tint);color:var(--bar-text)}
+:root[data-theme="dark"] .tint-white{color:var(--tinta-texto-escuro)}
+:root[data-theme="dark"] .tint-soft{color:var(--tinta-texto-escuro)}
+:root[data-theme="dark"] .tint-frost{color:var(--tinta-texto-escuro)}
+:root[data-theme="dark"] .tint-control{color:var(--tinta-texto-escuro)}
+@media (prefers-reduced-transparency:reduce){
+  .tint-ink{background:var(--tinta-ink-solida)}
+  .tint-blue{background:var(--tinta-blue-solida)}
+  .tint-red,.tint-green,.tint-white,.tint-soft,.tint-frost,.tint-control{background:var(--tinta-neutra-solida);color:var(--tinta-neutra-texto)}
+  .tint-bar{background:var(--tinta-barra-solida)}
+  :root[data-theme="dark"] .tint-bar{background:var(--tinta-barra-escura)}
+}
+@media (prefers-reduced-transparency:reduce){
+  :root[data-theme="dark"] :is(.tint-soft,.tint-frost,.tint-control){background:var(--tinta-neutra-escura);color:var(--tinta-neutra-escura-texto)}
+}
+
+/* Pills (buttons/links inside a GlassPill: a material <Glass> in Blink,
+   the same look as <Frost> elsewhere). */
+.pill{border-radius:999px}
+.pill .btn{
+  display:inline-flex;align-items:center;gap:8px;padding:12px 22px;min-height:44px;
+  font:inherit;font-size:15.5px;font-weight:600;letter-spacing:-.1px;
+  color:inherit;text-decoration:none;border-radius:inherit;background:none;border:0;cursor:pointer;
+}
+.pill .btn:active{transform:scale(.975)}
+
+/* Glass caption pill over a photo. */
+.cap-pill{border-radius:16px;max-width:100%}
+.cap-pill a{color:inherit;text-underline-offset:2px}

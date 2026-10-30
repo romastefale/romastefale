@@ -75,6 +75,11 @@ html[data-page="pintester"] ::selection{background:var(--red);color:#fff}
 .pt-closing span{display:block;margin-top:6px;color:var(--red)}
 .pt-eof{margin:4px 0 0;text-align:center;font-size:11px;letter-spacing:.2em;color:var(--faint)}
 
+/* Signature: the only transition on the page, and it runs only at the end. */
+.pt-sign{margin:28px 0 0;text-align:center;font-size:30px;font-weight:800;letter-spacing:-.02em;color:var(--text);opacity:0;transform:translateY(10px);transition:opacity 1.2s ease,transform 1.2s var(--glass-ease)}
+.pt-sign[data-seen]{opacity:1;transform:none}
+@media (prefers-reduced-motion:reduce){.pt-sign{opacity:1;transform:none;transition:none}}
+
 /* Annexes: appended after the original, in report register. */
 .pt-annexes{display:flex;flex-direction:column;gap:16px}
 .pt-annex{padding:20px}

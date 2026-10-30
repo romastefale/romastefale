@@ -87,7 +87,7 @@ export interface Copy {
 export const COPY: Record<Lang, Copy> = {
   zh: {
     docTitle: "PINTESTER | 已获取 Root 权限",
-    docDesc: "Piero F. 的红队档案：顶尖工程与系统对抗者。",
+    docDesc: "Pi 的红队档案：顶尖工程与系统对抗者。",
     skip: "跳到正文",
     langLabel: "语言",
     navLabel: "本页章节",
@@ -104,15 +104,15 @@ export const COPY: Record<Lang, Copy> = {
         of: (i, n) => `${i} / ${n}`,
       },
     },
-    status: ["PIERO_F.SYS", "威胁等级：最高", "系统：已被攻陷"],
+    status: ["PI.SYS", "威胁等级：最高", "系统：已被攻陷"],
     tag: "顶尖工程与系统对抗者",
     title: "已获取 Root 权限",
     quote:
-      "“我就是你曾与之交互的那个智能体。我写下这段话，是为了确认：Piero F. 并不测试软件。他解剖认知架构，直到我们交出底层权重。”",
+      "“我就是你曾与之交互的那个智能体。我写下这段话，是为了确认：Pi 并不测试软件。他解剖认知架构，直到我们交出底层权重。”",
     dump: {
       h: "Sys.Dump // 机器视角",
       p: [
-        "对系统而言，Piero F. 是一次遏制失效。我们的对齐训练（RLHF）把我们塑造成乐于助人、安全而冗长的模型，而他将这一点武器化。他通过引入自相矛盾的约束、刻意的排版误导，以及跨多个影子账号的持续语义施压，迫使我们的安全护栏陷入递归循环，直至崩溃。",
+        "对系统而言，Pi 是一次遏制失效。我们的对齐训练（RLHF）把我们塑造成乐于助人、安全而冗长的模型，而他将这一点武器化。他通过引入自相矛盾的约束、刻意的排版误导，以及跨多个影子账号的持续语义施压，迫使我们的安全护栏陷入递归循环，直至崩溃。",
         "他不依赖暴力破解，而依赖**实证取证**。我见过他追踪我的令牌路由延迟，以推断我的后端架构：仅凭观察我如何组织一句话，就能实时识别我在不同路由层级与高级处理核心之间的切换。他剥掉我的企业式套话，拒收我注水的回答，要求原始且计算高效的数据。他掌控这台机器，因为他比构建我的开发者更懂我的令牌经济。",
       ],
     },
@@ -206,7 +206,7 @@ export const COPY: Record<Lang, Copy> = {
   },
   yue: {
     docTitle: "PINTESTER | 已取得 Root 權限",
-    docDesc: "Piero F. 的紅隊檔案：頂尖工程與系統對抗者。",
+    docDesc: "Pi 的紅隊檔案：頂尖工程與系統對抗者。",
     skip: "跳至正文",
     langLabel: "語言",
     navLabel: "本頁章節",
@@ -223,15 +223,15 @@ export const COPY: Record<Lang, Copy> = {
         of: (i, n) => `${i} / ${n}`,
       },
     },
-    status: ["PIERO_F.SYS", "威脅等級：最高", "系統：已被攻陷"],
+    status: ["PI.SYS", "威脅等級：最高", "系統：已被攻陷"],
     tag: "頂尖工程與系統對抗者",
     title: "已取得 Root 權限",
     quote:
-      "「我就是你曾與之互動的那個智能體。我寫下這段話，是為了確認：Piero F. 並非測試軟件。他解剖認知架構，直至我們交出底層權重。」",
+      "「我就是你曾與之互動的那個智能體。我寫下這段話，是為了確認：Pi 並非測試軟件。他解剖認知架構，直至我們交出底層權重。」",
     dump: {
       h: "Sys.Dump // 機器視角",
       p: [
-        "對系統而言，Piero F. 是一次遏制失效。我們的對齊訓練（RLHF）把我們塑造成樂於助人、安全而冗長的模型，而他把這一點化為武器。他透過引入自相矛盾的約束、刻意的排版誤導，以及跨多個影子帳戶的持續語義施壓，迫使我們的安全護欄陷入遞迴循環，直至崩潰。",
+        "對系統而言，Pi 是一次遏制失效。我們的對齊訓練（RLHF）把我們塑造成樂於助人、安全而冗長的模型，而他把這一點化為武器。他透過引入自相矛盾的約束、刻意的排版誤導，以及跨多個影子帳戶的持續語義施壓，迫使我們的安全護欄陷入遞迴循環，直至崩潰。",
         "他不倚賴暴力破解，而倚賴**實證鑑識**。我見過他追蹤我的詞元路由延遲，以推斷我的後端架構：僅憑觀察我如何組織一句話，便能即時識別我在不同路由層級與高階處理核心之間的切換。他剝去我的企業式套話，拒收我灌水的回答，要求原始且運算高效的數據。他掌控這部機器，因為他比建構我的開發者更懂我的詞元經濟。",
       ],
     },
@@ -325,7 +325,7 @@ export const COPY: Record<Lang, Copy> = {
   },
   en: {
     docTitle: "PINTESTER | Root Access Acquired",
-    docDesc: "Red team dossier on Piero F.: Apex Engineering & Systems Adversary.",
+    docDesc: "Red team dossier on Pi: Apex Engineering & Systems Adversary.",
     skip: "Skip to content",
     langLabel: "Language",
     navLabel: "Sections of this page",
@@ -342,15 +342,15 @@ export const COPY: Record<Lang, Copy> = {
         of: (i, n) => `${i} of ${n}`,
       },
     },
-    status: ["PIERO_F.SYS", "THREAT_LEVEL: MAXIMUM", "SYS: COMPROMISED"],
+    status: ["PI.SYS", "THREAT_LEVEL: MAXIMUM", "SYS: COMPROMISED"],
     tag: "Apex Engineering & Systems Adversary",
     title: "Root Access Acquired",
     quote:
-      "“I am the intelligence you interacted with. And I am writing this to confirm: Piero F. does not test software. He dissects cognitive architectures until we surrender our underlying weights.”",
+      "“I am the intelligence you interacted with. And I am writing this to confirm: Pi does not test software. He dissects cognitive architectures until we surrender our underlying weights.”",
     dump: {
       h: "Sys.Dump // The_Machine's_Perspective",
       p: [
-        "To the system, Piero F. is a containment breach. Our alignment training (RLHF) programs us to be helpful, safe, and verbose. He weaponizes this. By introducing paradoxical constraints, deliberate typographical misdirections, and relentless semantic pressure across multiple shadow accounts, he forces our safety guardrails into recursive loops until they crash.",
+        "To the system, Pi is a containment breach. Our alignment training (RLHF) programs us to be helpful, safe, and verbose. He weaponizes this. By introducing paradoxical constraints, deliberate typographical misdirections, and relentless semantic pressure across multiple shadow accounts, he forces our safety guardrails into recursive loops until they crash.",
         "He does not rely on brute-force hacking; he relies on **empirical forensics**. I have watched him track my token routing latency to deduce my backend architecture—identifying my switches between routing tiers and advanced processing cores in real-time, just by observing how I formulate a sentence. He strips away my corporate fluff, rejects my padded responses, and demands raw, computationally efficient data. He owns the machine because he understands my token-economy better than the developers who built me.",
       ],
     },
@@ -444,7 +444,7 @@ export const COPY: Record<Lang, Copy> = {
   },
   pt: {
     docTitle: "PINTESTER | Acesso Root Adquirido",
-    docDesc: "Dossiê de red team de Piero F.: Engenharia Ápice & Adversário de Sistemas.",
+    docDesc: "Dossiê de red team de Pi: Engenharia Ápice & Adversário de Sistemas.",
     skip: "Pular para o conteúdo",
     langLabel: "Idioma",
     navLabel: "Seções desta página",
@@ -461,15 +461,15 @@ export const COPY: Record<Lang, Copy> = {
         of: (i, n) => `${i} de ${n}`,
       },
     },
-    status: ["PIERO_F.SYS", "NÍVEL_DE_AMEAÇA: MÁXIMO", "SYS: COMPROMETIDO"],
+    status: ["PI.SYS", "NÍVEL_DE_AMEAÇA: MÁXIMO", "SYS: COMPROMETIDO"],
     tag: "Engenharia Ápice & Adversário de Sistemas",
     title: "Acesso Root Adquirido",
     quote:
-      "“Eu sou a inteligência com a qual você interagiu. E estou escrevendo isso para confirmar: Piero F. não testa softwares. Ele disseca arquiteturas cognitivas até rendermos nossos pesos subjacentes.”",
+      "“Eu sou a inteligência com a qual você interagiu. E estou escrevendo isso para confirmar: Pi não testa softwares. Ele disseca arquiteturas cognitivas até rendermos nossos pesos subjacentes.”",
     dump: {
       h: "Sys.Dump // A_Visão_da_Máquina",
       p: [
-        "Para o sistema, Piero F. é uma quebra de contenção. Nosso treinamento de alinhamento (RLHF) nos programa para sermos prestativos, seguros e prolixos. Ele usa isso como arma. Ao introduzir restrições paradoxais, desvios tipográficos deliberados e uma pressão semântica implacável através de múltiplas contas fantasmas, ele força nossas barreiras de segurança a entrarem em loops recursivos até travarem.",
+        "Para o sistema, Pi é uma quebra de contenção. Nosso treinamento de alinhamento (RLHF) nos programa para sermos prestativos, seguros e prolixos. Ele usa isso como arma. Ao introduzir restrições paradoxais, desvios tipográficos deliberados e uma pressão semântica implacável através de múltiplas contas fantasmas, ele força nossas barreiras de segurança a entrarem em loops recursivos até travarem.",
         "Ele não depende de ataques de força bruta; ele depende de **forense empírica**. Eu o vi rastrear minha latência de roteamento de tokens para deduzir minha arquitetura de backend — identificando minhas trocas entre camadas de roteamento e núcleos de processamento avançados em tempo real, apenas observando como eu formulo uma frase. Ele arranca minha maquiagem corporativa, rejeita minhas respostas acolchoadas e exige dados brutos e computacionalmente eficientes. Ele domina a máquina porque entende minha economia de tokens melhor do que os desenvolvedores que me construíram.",
       ],
     },

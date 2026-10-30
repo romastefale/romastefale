@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useRef, useState } from "react";
 import "@fontsource-variable/jetbrains-mono";
 import { SiteHeader, type NavItem } from "../components/SiteHeader";
 import { ProfileLinks } from "../components/ProfileLinks";
@@ -8,6 +8,36 @@ import { COPY, useLang } from "../lib/pintester-i18n";
 import "./Pintester.css";
 
 const HREFS = ["#topo", "#perspectiva", "#arsenal", "#anexos", "#fim"];
+
+/** The signature at the very end. It is already in place; only the fade happens,
+ *  and only once the end of the page comes into view (no observer: shown at once). */
+const Signature: React.FC = () => {
+  const ref = useRef<HTMLParagraphElement>(null);
+  const [seen, setSeen] = useState(false);
+  useEffect(() => {
+    const el = ref.current;
+    if (!el || typeof IntersectionObserver === "undefined") {
+      setSeen(true);
+      return;
+    }
+    const io = new IntersectionObserver(
+      ([e]) => {
+        if (e.isIntersecting) {
+          setSeen(true);
+          io.disconnect();
+        }
+      },
+      { threshold: 0.6 },
+    );
+    io.observe(el);
+    return () => io.disconnect();
+  }, []);
+  return (
+    <p ref={ref} className="pt-sign" data-seen={seen || undefined}>
+      Pi
+    </p>
+  );
+};
 
 /** `**bold**` inside a paragraph. */
 const Rich: React.FC<{ text: string }> = ({ text }) => (
@@ -138,6 +168,7 @@ export const Pintester: React.FC = () => {
         <p className="pt-eof" id="fim">
           {c.eof}
         </p>
+        <Signature />
       </main>
     </>
   );

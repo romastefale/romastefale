@@ -6,11 +6,11 @@
 pnpm install --frozen-lockfile   # igual ao CI
 pnpm typecheck                   # tsc --noEmit -p tsconfig.json
 pnpm build                       # typecheck + vite build → dist/
-pnpm preview                     # http://127.0.0.1:4179/HTML/ (serve o dist/)
-pnpm dev                         # http://127.0.0.1:4178/HTML/ (desenvolvimento)
+pnpm preview                     # http://127.0.0.1:4179/romastefale/ (serve o dist/)
+pnpm dev                         # http://127.0.0.1:4178/romastefale/ (desenvolvimento)
 ```
 
-- **V1. `pnpm typecheck` e `pnpm build` DEVEM passar sem erros.** A verificação DEVE ser feita sobre o `pnpm preview` (o build de produção, com `base /HTML/`), e não só sobre o `pnpm dev`.
+- **V1. `pnpm typecheck` e `pnpm build` DEVEM passar sem erros.** A verificação DEVE ser feita sobre o `pnpm preview` (o build de produção, com `base /romastefale/`), e não só sobre o `pnpm dev`.
   *Por quê:* os caminhos com `BASE_URL`, os chunks e o código dividido só aparecem de verdade no build.
 
 ## 2. Matriz de testes
@@ -126,7 +126,7 @@ for (const engine of [chromium, webkit]) {
     page.on("console", (m) => ["error", "warning"].includes(m.type()) && problems.push(m.text()));
     page.on("pageerror", (e) => problems.push(String(e)));
     page.on("response", (r) => r.status() >= 400 && problems.push(`${r.status()} ${r.url()}`));
-    await page.goto("http://127.0.0.1:4179/HTML/", { waitUntil: "networkidle" });
+    await page.goto("http://127.0.0.1:4179/romastefale/", { waitUntil: "networkidle" });
     await page.click(".sh-search-btn");
     await page.type(".page-search input", "vidro");
     await page.waitForTimeout(400);

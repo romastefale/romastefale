@@ -1,7 +1,8 @@
 .ls-wrap{border-radius:999px}
 .ls{display:grid;grid-template-columns:repeat(4,1fr);gap:4px;padding:5px}
-.ls-btn{min-height:44px;padding:0 6px;border:0;border-radius:999px;background:none;color:var(--text-dim);font-weight:800;font-size:14px;transition:background .3s var(--glass-ease),color .2s}
-.ls-btn[aria-pressed="true"]{background:rgba(255,0,51,.26);color:#fff}
-@media (hover:hover){.ls-btn:not([aria-pressed="true"]):hover{background:rgba(255,255,255,.08);color:#fff}}
+.ls-btn{min-height:44px;padding:0 6px;border:0;border-radius:999px;background:none;color:var(--bar-sub);font-weight:500;font-size:14px;transition:background .3s var(--glass-ease),color .2s}
+/* D4: the selected item is a tinted pill with no shadow and no line, weight 600 in --bar-text; the tint is the page's red. */
+.ls-btn[aria-pressed="true"]{background:rgba(255,0,51,.26);color:var(--bar-text);font-weight:600}
+@media (hover:hover){.ls-btn:not([aria-pressed="true"]):hover{background:rgba(255,255,255,.08);color:var(--bar-text)}}
 .ls-btn:active{transform:scale(.97)}
 @media (prefers-reduced-motion:reduce){.ls-btn{transition:none}}

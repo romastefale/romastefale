@@ -6,7 +6,7 @@
    :root[data-theme] blocks (specificity 0,2,1 vs 0,2,0). */
 html[data-page="pintester"][data-theme]{
   --page-edge:#07060a;
-  --page-bg:none;
+  --page-bg:url("../assets/fundo-pintester.svg");
   --text:#f3f4f6;
   --text-dim:#c4c6d0;
   --faint:#9a9ca8;
@@ -15,12 +15,12 @@ html[data-page="pintester"][data-theme]{
   --red:#ff0033;
   --vidro-tint:rgba(20,14,20,.42);
 }
-html[data-page="pintester"] body{font-family:"JetBrains Mono Variable",ui-monospace,Menlo,Consolas,monospace}
-/* JetBrains Mono has no CJK glyphs: pick each script's native UI face by language. */
-html[data-page="pintester"]:lang(zh-Hans) body{font-family:"JetBrains Mono Variable","PingFang SC","Noto Sans CJK SC","Source Han Sans SC","Microsoft YaHei",ui-monospace,sans-serif}
-html[data-page="pintester"]:lang(zh-HK) body{font-family:"JetBrains Mono Variable","PingFang HK","Noto Sans CJK HK","Source Han Sans HK","Microsoft JhengHei",ui-monospace,sans-serif}
-html[data-page="pintester"]:lang(zh-Hans) :is(.pt-body,.pt-card p,.pt-block p,.pt-closing,.pt-note,.pt-row dd),
-html[data-page="pintester"]:lang(zh-HK) :is(.pt-body,.pt-card p,.pt-block p,.pt-closing,.pt-note,.pt-row dd){line-height:1.85}
+/* P7: a family that always resolves (the bundled web font), then system-ui. JetBrains
+   Mono has no CJK glyphs, so Chinese falls to system-ui, which the browser resolves to
+   the platform face for <html lang> (zh-Hans or zh-HK) without searching font names. */
+html[data-page="pintester"] body{font-family:"JetBrains Mono Variable",system-ui,sans-serif}
+html[data-page="pintester"]:lang(zh-Hans) :is(.pt-body,.pt-card p,.pt-block p,.pt-closing,.pt-note,.pt-table td),
+html[data-page="pintester"]:lang(zh-HK) :is(.pt-body,.pt-card p,.pt-block p,.pt-closing,.pt-note,.pt-table td){line-height:1.85}
 html[data-page="pintester"] ::selection{background:var(--red);color:#fff}
 
 /* The template's column: one card per block, 16px apart. */
@@ -31,19 +31,9 @@ html[data-page="pintester"] ::selection{background:var(--red);color:#fff}
 .pt > *{width:100%;max-width:564px;margin-left:auto;margin-right:auto}
 .card-glass{border-radius:22px}
 
-/* Static colour fields (no animation, like the template). One viewport tall in
-   lvh and run past both edges by --fade-under; a vertical mask takes the fields
-   off the top and bottom 14%, so both edges are the exact page colour. */
-.pt-bg{
-  position:fixed;z-index:-1;left:0;right:0;pointer-events:none;
-  top:calc(-1 * var(--fade-under));height:calc(100vh + 2 * var(--fade-under));height:calc(100lvh + 2 * var(--fade-under));
-  background:
-    radial-gradient(70% 38% at 0% 18%, rgba(255,0,51,.5) 0%, rgba(255,0,51,0) 70%),
-    radial-gradient(60% 34% at 100% 56%, rgba(122,10,36,.62) 0%, rgba(122,10,36,0) 70%),
-    radial-gradient(70% 30% at 28% 88%, rgba(255,77,109,.26) 0%, rgba(255,77,109,0) 72%);
-  -webkit-mask-image:linear-gradient(180deg,transparent 0,#000 14%,#000 86%,transparent 100%);
-  mask-image:linear-gradient(180deg,transparent 0,#000 14%,#000 86%,transparent 100%);
-}
+/* The background is the template's html::before (global.css): the static SVG from
+   scripts/make-organic-bg.py (--page-bg above), 100lvh tall, z-index -1, no animation,
+   starting and ending on --page-edge (DESIGN D1, D2, D2.2). */
 
 /* Hero */
 .pt-hero{padding:24px 20px 22px;display:flex;flex-direction:column;gap:8px}

@@ -1,12 +1,12 @@
-# Contrato técnico: interface de vidro líquido (romastefale/HTML)
+# Contrato técnico: interface de vidro líquido (romastefale/romastefale)
 
 Esta pasta descreve **como o projeto foi construído e por quê**. Ela é escrita como um **contrato normativo**: um projeto futuro que queira repetir este resultado (páginas React com vidro líquido, menu flutuante, pesquisa na página, modo claro/escuro, tela cheia e carregamento leve) deve seguir estas regras, a menos que tenha um motivo documentado para não seguir.
 
 | | |
 |---|---|
-| **Site ao vivo** | <https://romastefale.github.io/HTML/> |
-| **Páginas** | [Amostra](https://romastefale.github.io/HTML/liquid-glass-sample.html) · [Painel](https://romastefale.github.io/HTML/painel.html) · [Galeria](https://romastefale.github.io/HTML/galeria.html) · [Contrato de design](https://romastefale.github.io/HTML/contrato-design.html) · [Arquitetura e operação](https://romastefale.github.io/HTML/contrato-arquitetura.html) |
-| **Repositório** | [`romastefale/HTML`](https://github.com/romastefale/HTML) |
+| **Site ao vivo** | <https://romastefale.github.io/romastefale/> |
+| **Páginas** | [Amostra](https://romastefale.github.io/romastefale/liquid-glass-sample.html) · [Painel](https://romastefale.github.io/romastefale/painel.html) · [Galeria](https://romastefale.github.io/romastefale/galeria.html) · [Contrato de design](https://romastefale.github.io/romastefale/contrato-design.html) · [Arquitetura e operação](https://romastefale.github.io/romastefale/contrato-arquitetura.html) |
+| **Repositório** | [`romastefale/romastefale`](https://github.com/romastefale/romastefale) |
 | **Biblioteca de vidro** | [`@samasante/liquid-glass`](https://www.npmjs.com/package/@samasante/liquid-glass) 0.1.1, idêntica ao fork [`romastefale/liquid-glass`](https://github.com/romastefale/liquid-glass) no commit `4e7b769` |
 | **Estado descrito** | PR #15 (`lentes-e-foco`, em revisão), que parte de `4748463` (merge do PR #14) |
 

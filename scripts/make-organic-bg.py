@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Writes the two static page backgrounds (src/assets/fundo-{claro,escuro}.svg).
+"""Writes the static page backgrounds (src/assets/fundo-{claro,escuro,pintester}.svg).
 
 Irregular, heavily blurred colour fields (never circles) over a vertical base
 that starts and ends on --page-edge (the browser-bar colour of the mode). A
@@ -48,6 +48,12 @@ THEMES = {
     "escuro": {
         "base": [(0, "#1b1646"), (.12, "#281f6a"), (.28, "#1d2a60"), (.5, "#16304d"), (.72, "#2b1e58"), (.88, "#281f6a"), (1, "#1b1646")],
         "fields": [("#d646a0", .42), ("#28a0dc", .40), ("#e68c3c", .28), ("#28c8aa", .30), ("#7850e6", .40), ("#c8508c", .26), ("#3c78dc", .32)],
+    },
+    # PINTESTER (index.html, always dark): black base, red fields. The edges are
+    # its --page-edge (#07060a), which is also its theme-color and canvas.
+    "pintester": {
+        "base": [(0, "#07060a"), (.12, "#12070c"), (.28, "#1a0810"), (.5, "#12070e"), (.72, "#1c0a12"), (.88, "#12070c"), (1, "#07060a")],
+        "fields": [("#ff0033", .42), ("#7a0a24", .60), ("#ff4d6d", .22), ("#b3001f", .38), ("#ff0033", .24), ("#7a0a24", .42), ("#ff4d6d", .18)],
     },
 }
 

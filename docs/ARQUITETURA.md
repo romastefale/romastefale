@@ -50,7 +50,7 @@ HTML/
 ├── contrato-arquitetura.html     # entrada do Vite: arquitetura e operação (docs/)
 ├── package.json / pnpm-lock.yaml
 ├── tsconfig.json
-├── vite.config.ts                # base /HTML/, seis entradas, plugin de docs, portas 4178/4179
+├── vite.config.ts                # base /romastefale/, seis entradas, plugin de docs, portas 4178/4179
 ├── public/                       # copiado como está para dist/
 │   └── img/
 │       ├── CREDITS.md            # autor, licença e fonte de cada foto
@@ -98,7 +98,7 @@ HTML/
 
 ```ts
 export default defineConfig({
-  base: "/HTML/",                                   // site de projeto do GitHub Pages
+  base: "/romastefale/",                                   // site de projeto do GitHub Pages
   plugins: [react(), docsPlugin()],                 // docsPlugin: scripts/vite-docs.ts
   resolve: { dedupe: ["react", "react-dom"] },
   build: {
@@ -119,9 +119,9 @@ export default defineConfig({
 ```
 
 - **A5. Cada página DEVE ser uma entrada HTML própria em `rollupOptions.input`.** NÃO DEVE haver roteador no cliente.
-  *Por quê:* as URLs públicas (`/HTML/`, `/HTML/index.html`, `/HTML/liquid-glass-sample.html`) existiam antes do React e continuaram iguais no PR #4. Com uma entrada por página, cada uma carrega só o JS de que precisa (veja [DESEMPENHO.md](DESEMPENHO.md)). As páginas novas (PR #12) seguem a mesma regra, com nomes curtos em pt-BR: `painel.html`, `galeria.html`, `contrato-design.html` e `contrato-arquitetura.html`.
+  *Por quê:* as URLs públicas (`/romastefale/`, `/romastefale/index.html`, `/romastefale/liquid-glass-sample.html`) existiam antes do React e continuaram iguais no PR #4. Com uma entrada por página, cada uma carrega só o JS de que precisa (veja [DESEMPENHO.md](DESEMPENHO.md)). As páginas novas (PR #12) seguem a mesma regra, com nomes curtos em pt-BR: `painel.html`, `galeria.html`, `contrato-design.html` e `contrato-arquitetura.html`.
 - **A5.1. Toda página DEVE estar em `PAGES` (`src/lib/pages.ts`)**, com `href`, rótulo do menu, título e resumo. O cartão do portal e os links do menu saem dessa lista.
-- **A6. `base` DEVE ser o caminho do repositório** (`/HTML/`), e todo caminho de asset em runtime DEVE passar por `import.meta.env.BASE_URL`, via `asset()` em `Surfaces.tsx`:
+- **A6. `base` DEVE ser o caminho do repositório** (`/romastefale/`), e todo caminho de asset em runtime DEVE passar por `import.meta.env.BASE_URL`, via `asset()` em `Surfaces.tsx`:
 
   ```ts
   export const asset = (path: string) => `${import.meta.env.BASE_URL}${path}`;

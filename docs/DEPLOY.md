@@ -2,7 +2,7 @@
 
 ## 1. Configuração do Pages
 
-- **R1. Settings → Pages → Build and deployment → Source DEVE ser "GitHub Actions".** Hoje é `build_type: "workflow"`, conferido com `gh api repos/romastefale/HTML/pages`.
+- **R1. Settings → Pages → Build and deployment → Source DEVE ser "GitHub Actions".** Hoje é `build_type: "workflow"`, conferido com `gh api repos/romastefale/romastefale/pages`.
   *Por quê:* no modo "Deploy from a branch" (legacy), o Pages publica a raiz do repositório **sem build**. As páginas apontariam para `/src/*.tsx`, e o site ficaria em branco.
 - **R2. ⚠️ Num projeto novo, ou numa migração de HTML estático para Vite, a fonte DEVE ser trocada para "GitHub Actions" ANTES do merge do PR que introduz o Vite.**
   *Por quê:* foi o aviso do PR #4. Trocar antes não quebra nada, porque o workflow já publica o que houver. Trocar depois deixa o site em branco entre o merge e a troca. O workflow também avisa no log (`::warning::`) se a fonte não for `workflow`.
@@ -64,19 +64,19 @@ Consequências:
 gh run list --workflow pages.yml --limit 3 --json conclusion,headSha,createdAt
 
 # 2. A fonte do Pages é "workflow"
-gh api repos/romastefale/HTML/pages --jq .build_type
+gh api repos/romastefale/romastefale/pages --jq .build_type
 
 # 3. O HTML ao vivo aponta para os assets do build novo (compare com dist/ local)
-curl -s https://romastefale.github.io/HTML/ | grep -o 'assets/[^"]*'
+curl -s https://romastefale.github.io/romastefale/ | grep -o 'assets/[^"]*'
 for p in liquid-glass-sample painel galeria fundo-animado contrato-design contrato-arquitetura; do
-  curl -s "https://romastefale.github.io/HTML/$p.html" | grep -o 'assets/[^"]*'; done
+  curl -s "https://romastefale.github.io/romastefale/$p.html" | grep -o 'assets/[^"]*'; done
 
 # 4. Cabeçalhos
-curl -sI https://romastefale.github.io/HTML/ | grep -iE '^(cache-control|content-encoding|last-modified|etag)'
+curl -sI https://romastefale.github.io/romastefale/ | grep -iE '^(cache-control|content-encoding|last-modified|etag)'
 
 # 5. Sem 404: cada asset e cada imagem respondem 200
-for a in $(curl -s https://romastefale.github.io/HTML/ | grep -o 'assets/[^"]*'); do
-  curl -s -o /dev/null -w "%{http_code} $a\n" "https://romastefale.github.io/HTML/$a"; done
+for a in $(curl -s https://romastefale.github.io/romastefale/ | grep -o 'assets/[^"]*'); do
+  curl -s -o /dev/null -w "%{http_code} $a\n" "https://romastefale.github.io/romastefale/$a"; done
 ```
 
 Depois, abra as seis páginas num navegador com cache limpo e o console aberto: deve haver 0 erros e 0 respostas 404 na aba de rede.

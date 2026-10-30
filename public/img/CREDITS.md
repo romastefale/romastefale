@@ -7,7 +7,8 @@ Para carregar mais rápido, `scripts/make-responsive-images.py` gera a partir de
 com 480, 720, 1080 e 1440 px de largura, em `img/r/` (por exemplo, `img/r/santorini-oia-1080.avif`). O navegador escolhe a
 versão conforme a tela, e os JPEG continuam como alternativa. As versões menores são só redimensionadas e recomprimidas,
 sem outra alteração.
-Os fundos das páginas são gradientes CSS (`src/styles/global.css`), sem imagens.
+Os fundos das páginas são gradientes CSS (`src/styles/global.css`), sem imagens; o do Início (PINTESTER) é o SVG `src/assets/fundo-pintester.svg`, desenhado por `scripts/make-organic-bg.py`.
+As fotos de perfil do Início (GitHub, Telegram e a imagem do NFT do domínio `romastefale.ton`) são do próprio dono. `scripts/fetch-avatars.mjs` as baixa a cada build para `public/avatars/`, que não é versionado.
 
 | Arquivo | Onde aparece | Lugar | Autor | Licença | Fonte |
 |---|---|---|---|---|---|

@@ -56,7 +56,6 @@ export const Pintester: React.FC = () => {
         {c.skip}
       </a>
       <SiteHeader items={nav} current={"inicio"} label={c.navLabel} labels={c.header} hideTheme hidePicker />
-      <div className="pt-bg" aria-hidden="true" />
       <main className="pt" id="conteudo">
         <LangSwitch lang={lang} onChange={setLang} label={c.langLabel} />
 

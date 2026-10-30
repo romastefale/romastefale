@@ -274,3 +274,19 @@ O azul que continua no site é preenchimento, não foco: o trilho ligado do swit
 | N29 | Sombra, faixa ou fundo que escureça a primeira ou a última linha da viewport | A borda deixa de ser a cor da barra e a emenda aparece (D2.3) | PR #14 |
 | N30 | Lente de lupa que re-renderiza o React a cada movimento do dedo, ou `transform` no elemento filtrado | Um render por evento travava o arrasto no WebKit, e o Safari descarta o `filter: url()` de um elemento filtrado com `transform`. Guarde a posição num ref, escreva uma vez por quadro (`requestAnimationFrame`) e mova o invólucro | PR #15 |
 | N31 | Lente de deslocamento no menu (pílula, lista ou botões) | O menu inteiro é o fosco da barra: `blur` e `saturate`, sem `url()` | `BROWSERS.md` |
+
+## 12. Variante PINTESTER (`index.html`)
+
+O Início do site é o dossiê PINTESTER, que usa o mesmo vidro, o mesmo menu e as mesmas camadas de borda, com os desvios abaixo. Cada um é uma decisão do dono do projeto, e as demais regras valem sem mudança.
+
+| Regra | Desvio | Motivo |
+|---|---|---|
+| D1, D2 | O fundo é `src/assets/fundo-pintester.svg`, gerado por `scripts/make-organic-bg.py` com base preta e campos vermelhos; `--page-edge` é `#07060a` | Cores do PINTESTER |
+| D11, D12.2 | A pílula não tem o ☰ (`hidePicker`): o Início não lista as outras páginas, que continuam publicadas pelo endereço direto | O template é só modelo; o site é um dossiê de uma página |
+| D20 a D23 | Só modo escuro: `<html data-theme-lock="dark">`, sem botão de tema (`hideTheme`). Veja T14 a T16 em [TELA-CHEIA-E-BARRAS.md](TELA-CHEIA-E-BARRAS.md) | Pedido de design |
+| D27 | Quatro idiomas (mandarim, cantonês de Hong Kong, inglês e português), mandarim primeiro. Todo texto e todo rótulo vêm de `COPY` em `src/lib/pintester-i18n.ts`, e `<html lang>`, o título da aba e a descrição acompanham o idioma | Pedido de design |
+| D4 | A pílula de seleção do seletor de idioma usa a tinta vermelha da página (`rgba(255,0,51,.26)`), sem sombra e sem linha, no peso 600 | Cor da página; a forma segue a regra |
+| D12 | O menu lista as seções do dossiê (Root, Visão, Arsenal, Anexo A, EOF) | Seções da página |
+| D24 | As fotos de perfil (GitHub, Telegram e a imagem do NFT do domínio) são do próprio dono e baixadas no build por `scripts/fetch-avatars.mjs`; não ficam no repositório | Fotos do dono |
+
+O texto original do dossiê fica no corpo da página; o texto de revisão entra só como anexo (`annexes` em `pintester-i18n.ts`), no fim.

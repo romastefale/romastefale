@@ -51,13 +51,15 @@ const sources = {
 };
 
 await mkdir(OUT, { recursive: true });
-let failed = 0;
+// meta.json lists the photos that exist, so the page never asks for a missing file
+// (a 404 is an error in the console, and the checklist wants none).
+const have = [];
 for (const [name, run] of Object.entries(sources)) {
   try {
     await run();
+    have.push(name);
   } catch (e) {
-    failed++;
     console.warn(`::warning::avatar ${name} not updated: ${e.message}`);
   }
 }
-await writeFile(new URL("meta.json", OUT), JSON.stringify({ updated: new Date().toISOString(), failed }) + "\n");
+await writeFile(new URL("meta.json", OUT), JSON.stringify({ updated: new Date().toISOString(), have }) + "\n");

@@ -128,7 +128,8 @@ html::before{
    collapsed or standalone. A fixed layer at the bottom would end above the bar
    and cut the page, so there is none: the fade at the bottom is a real block
    in the flow (body::after), after the last content. */
-:root{--fade-under:max(120px, calc(100lvh - 100svh))}
+:root{--fade-under:120px}
+@supports (height:100lvh) and (height:100svh){:root{--fade-under:max(120px, calc(100lvh - 100svh))}}
 body::before{
   content:"";position:fixed;z-index:50;left:0;right:0;top:calc(-1 * var(--fade-under));
   --fade-h:calc(env(safe-area-inset-top, 0px) + var(--fade-top));

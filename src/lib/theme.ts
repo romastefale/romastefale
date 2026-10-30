@@ -66,11 +66,25 @@ const stored = (): ThemeName | null => {
 };
 const system = (): ThemeName => (matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
 
+/** A single-theme page (PINTESTER is dark only) sets <html data-theme-lock="dark">:
+ *  neither the toggle nor a change of the system setting may move it off that mode. */
+const lockedTheme = (): ThemeName | null => {
+  const v = document.documentElement.dataset.themeLock;
+  return v === "light" || v === "dark" ? v : null;
+};
+
+/** The browser-bar colour is the page's own --page-edge (read after data-theme is
+ *  set, so each page and mode keeps its own edge); PAGE_EDGE is the fallback. */
+const edgeColor = (t: ThemeName) =>
+  getComputedStyle(document.documentElement).getPropertyValue("--page-edge").trim() || PAGE_EDGE[t];
+
 const applyTheme = (t: ThemeName) => {
   const d = document.documentElement;
+  t = lockedTheme() ?? t;
   d.dataset.theme = t;
   d.style.colorScheme = t;
-  document.querySelectorAll('meta[name="theme-color"]').forEach((m) => m.setAttribute("content", PAGE_EDGE[t]));
+  const edge = edgeColor(t);
+  document.querySelectorAll('meta[name="theme-color"]').forEach((m) => m.setAttribute("content", edge));
   refreshSafariChromeSample();
 };
 
@@ -84,7 +98,7 @@ export const useTheme = () => {
     refreshSafariChromeSample();
     const mq = matchMedia("(prefers-color-scheme: dark)");
     const sync = () => {
-      if (stored()) return;
+      if (lockedTheme() || stored()) return;
       const t = system();
       applyTheme(t);
       setTheme(t);
@@ -93,6 +107,7 @@ export const useTheme = () => {
     return () => mq.removeEventListener("change", sync);
   }, []);
   const toggle = useCallback(() => {
+    if (lockedTheme()) return;
     setTheme((cur) => {
       const next: ThemeName = cur === "dark" ? "light" : "dark";
       try {

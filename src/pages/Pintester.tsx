@@ -44,7 +44,6 @@ export const Pintester: React.FC = () => {
 
         <section id="perfis" aria-label={c.profiles.label}>
           <ProfileLinks label={c.profiles.label} />
-          <p className="pt-note pt-live">{c.profiles.note}</p>
         </section>
 
         <GlassPanel className="card-glass">

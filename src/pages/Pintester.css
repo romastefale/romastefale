@@ -56,7 +56,6 @@ html[data-page="pintester"] ::selection{background:var(--red);color:#fff}
 .pt-sec{padding:20px}
 .pt-sec h2{margin:0 0 12px;font-size:12px;font-weight:800;letter-spacing:.08em;color:var(--red)}
 .pt-note{margin:0;font-size:12px;line-height:1.6;color:var(--faint)}
-.pt-live{margin:10px 4px 0}
 .pt-body{margin:0 0 12px;font-size:13.5px;line-height:1.75;color:var(--text-dim)}
 .pt-body:last-child{margin-bottom:0}
 .pt-body strong{color:var(--text)}

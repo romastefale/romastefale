@@ -100,3 +100,13 @@ Com a pesquisa aberta, o `SiteHeader` escuta `visualViewport` (`resize` e `scrol
   *Por quê:* com o teclado aberto, o iOS pode deslocar a viewport visual dentro da de layout, e um elemento `fixed` sairia da tela.
 - **T13. O foco no campo DEVE acontecer de forma síncrona, dentro do gesto do usuário** (`flushSync(() => setSearchOpen(true))` e, logo depois, `input.focus({ preventScroll: true })`).
   *Por quê:* o iOS só abre o teclado quando o `focus()` acontece dentro de um evento de toque.
+
+## 6. Página de tema único e navegadores sem `lvh`/`svh`
+
+- **T14. Uma página de tema único DEVE declarar `<html data-theme-lock="dark|light">`.** Com a trava, nem o botão de tema nem a mudança do tema do sistema (`prefers-color-scheme`) tiram a página desse modo (`src/lib/theme.ts`, `lockedTheme()`).
+  *Por quê:* sem a trava, quem nunca escolheu um tema vê a página trocar de modo quando o sistema muda, e o `theme-color` passava a `#8b82e6` ou `#1b1646`, cores que não são a da borda de uma página preta. Reproduzido na página PINTESTER antes da correção.
+- **T15. O `theme-color` aplicado por `applyTheme()` é o `--page-edge` lido da própria página** (com `PAGE_EDGE` só como reserva). Assim cada página, e cada modo, mantém a cor de borda dela sem editar uma tabela em `theme.ts`. Isso reduz os lugares a manter em sincronia em T10.
+- **T16. `--fade-under` TEM valor de reserva `120px`,** e só vira `max(120px, 100lvh - 100svh)` dentro de `@supports (height: 100lvh) and (height: 100svh)`.
+  *Por quê:* num navegador sem essas unidades, o `calc()` inválido anularia `top: calc(-1 * var(--fade-under))` e a camada de cima ficaria fora do lugar.
+- **Teste de bordas (D2, D2.1), feito no Chromium com safe areas simuladas via CDP** (`Emulation.setSafeAreaInsetsOverride`: retrato `top 59, bottom 34`; paisagem `left/right 47, bottom 21`; desktop 0): no topo, a primeira linha da viewport é `--page-edge`; no fim, a última linha e a faixa de `safe-bottom + 24px` acima dela são `--page-edge` sólido. Passou em 390×844, 844×390 e 1280×800, em mandarim e em inglês. No meio, o conteúdo chega à borda de baixo, como o PR #18 define.
+  > **Não verificado no Safari:** só havia Chromium nesta verificação. O comportamento da barra de baixo do Safari 26 continua vindo das fontes da seção 4.

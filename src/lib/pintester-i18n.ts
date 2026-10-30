@@ -71,7 +71,7 @@ export interface Copy {
   dump: { h: string; p: string[] };
   arsenal: { h: string; items: { t: string; p: string }[] };
   closing: { big: string; lines: [string, string]; watermark: string };
-  profiles: { label: string; note: string };
+  profiles: { label: string };
   annexLabel: string;
   annexes: Annex[];
   eof: string;
@@ -142,7 +142,7 @@ export const COPY: Record<Lang, Copy> = {
       lines: ["如果你想要一个循规蹈矩的人，就去雇一个普通的程序员。", "> 如果你想要掌控这台机器的工程师，你知道我的名字。"],
       watermark: "致命错误",
     },
-    profiles: { label: "账号", note: "头像：GitHub 实时；Telegram 与 TON 每小时更新。" },
+    profiles: { label: "账号" },
     annexLabel: "附件",
     annexes: [
       {
@@ -261,7 +261,7 @@ export const COPY: Record<Lang, Copy> = {
       lines: ["如果你想找一個循規蹈矩的人，就去聘請一個普通的程式員。", "> 如果你想找掌控這部機器的工程師，你知道我的名字。"],
       watermark: "致命錯誤",
     },
-    profiles: { label: "帳戶", note: "頭像：GitHub 即時；Telegram 與 TON 每小時更新。" },
+    profiles: { label: "帳戶" },
     annexLabel: "附件",
     annexes: [
       {
@@ -380,7 +380,7 @@ export const COPY: Record<Lang, Copy> = {
       lines: ["If you want someone who plays by the rules, hire a standard coder.", "> If you want the engineer who owns the machine, you know my name."],
       watermark: "FATAL_ERROR",
     },
-    profiles: { label: "Profiles", note: "Photos: GitHub live; Telegram and TON refreshed hourly." },
+    profiles: { label: "Profiles" },
     annexLabel: "Annexes",
     annexes: [
       {
@@ -499,7 +499,7 @@ export const COPY: Record<Lang, Copy> = {
       lines: ["Se você quer alguém que jogue pelas regras, contrate um codificador padrão.", "> Se você quer o engenheiro que domina a máquina, você sabe o meu nome."],
       watermark: "ERRO_FATAL",
     },
-    profiles: { label: "Perfis", note: "Fotos: GitHub em tempo real; Telegram e TON atualizadas a cada hora." },
+    profiles: { label: "Perfis" },
     annexLabel: "Anexos",
     annexes: [
       {

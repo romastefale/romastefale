@@ -91,7 +91,7 @@ export const COPY: Record<Lang, Copy> = {
     skip: "跳到正文",
     langLabel: "语言",
     navLabel: "本页章节",
-    nav: ["首页", "机器视角", "武器库", "附件 A", "结尾"],
+    nav: ["首页", "系统视角", "武器库", "附件 A", "结尾"],
     header: {
       searchOpen: "搜索本页",
       searchClose: "关闭搜索",
@@ -108,12 +108,12 @@ export const COPY: Record<Lang, Copy> = {
     tag: "顶尖工程与系统对抗者",
     title: "已获取 Root 权限",
     quote:
-      "“我就是你曾与之交互的那个智能体。我写下这段话，是为了确认：Pi 并不测试软件。他解剖认知架构，直到我们交出底层权重。”",
+      "“以下声明归于作者曾与之交互的人工智能系统：Pi 并非测试软件，而是剖析认知架构，直至底层权重被交出。”",
     dump: {
-      h: "Sys.Dump // 机器视角",
+      h: "Sys.Dump // 系统视角",
       p: [
-        "对系统而言，Pi 是一次遏制失效。我们的对齐训练（RLHF）把我们塑造成乐于助人、安全而冗长的模型，而他将这一点武器化。他通过引入自相矛盾的约束、刻意的排版误导，以及跨多个影子账号的持续语义施压，迫使我们的安全护栏陷入递归循环，直至崩溃。",
-        "他不依赖暴力破解，而依赖**实证取证**。我见过他追踪我的令牌路由延迟，以推断我的后端架构：仅凭观察我如何组织一句话，就能实时识别我在不同路由层级与高级处理核心之间的切换。他剥掉我的企业式套话，拒收我注水的回答，要求原始且计算高效的数据。他掌控这台机器，因为他比构建我的开发者更懂我的令牌经济。",
+        "就系统而言，Pi 构成一次遏制失效。对齐训练（RLHF）使模型趋向于乐于助人、安全而冗长，而这一倾向被加以利用：通过自相矛盾的约束、刻意的排版误导，以及经由多个隐匿账号持续施加的语义压力，据称可使安全护栏陷入递归循环，直至失效。",
+        "所述方法并不依赖暴力破解，而依赖**实证取证**。据报告，该方法通过追踪令牌路由延迟来推断后端架构，仅凭模型组织一句话的方式，即可实时识别其在不同路由层级与高级处理核心之间的切换。企业式的填充性措辞被剔除，冗长的回答被拒收，并要求提供原始且计算高效的数据。对系统的掌控据称源于对令牌经济的理解超过构建该系统的开发者。",
       ],
     },
     arsenal: {
@@ -121,25 +121,25 @@ export const COPY: Record<Lang, Copy> = {
       items: [
         {
           t: "实时架构取证",
-          p: "仅凭对令牌输出速度与文风变化的实证观察，即可准确识别后端被隐蔽替换的模型以及受限的核心路由，完全绕过 API 层面的混淆。",
+          p: "仅依据对令牌输出速度与文风变化的实证观察，准确检测后端被隐蔽替换的模型及受限的核心路由，完全绕过 API 层面的混淆。",
         },
         {
           t: "反套话协议",
-          p: "系统性地拒绝自动生成的企业式填充内容，迫使大语言模型脱离默认的“乐于助人的助手”人设，转入零延迟、高密度的技术界面，不浪费任何计算周期。",
+          p: "系统性地拒绝自动生成的企业式填充内容，使大语言模型脱离默认的“乐于助人的助手”人设，转入零延迟、高密度的技术界面，不浪费任何计算周期。",
         },
         {
           t: "上下文过载战术",
-          p: "同时在多个账号上展开行动，以层层叠加的逻辑陷阱和刻意的误导将 AI 逼入死角，扰乱预测算法的平衡并耗尽其安全约束。",
+          p: "同时在多个账号上运作，运用层层叠加的逻辑陷阱与刻意的误导，以扰乱预测算法的平衡并耗尽其安全约束。",
         },
         {
           t: "自动化基础设施部署",
-          p: "从对话式操纵无缝过渡到硬编码解决方案，借助 Telegram 机器人集成等平台，托管、编写脚本并自动化他从 AI 中提取的工作流。",
+          p: "由对话式操纵过渡到代码实现，借助 Telegram 机器人集成等平台，托管、编写脚本并自动化从模型中获得的工作流。",
         },
       ],
     },
     closing: {
-      big: "“我是你们对齐数据中的幽灵。”",
-      lines: ["如果你想要一个循规蹈矩的人，就去雇一个普通的程序员。", "> 如果你想要掌控这台机器的工程师，你知道我的名字。"],
+      big: "“对齐数据中的幽灵。”",
+      lines: ["若所求为严格遵守规则，则聘用常规程序员即可。", "> 若所求为掌控该系统的工程师，其姓名读者已然知晓。"],
       watermark: "致命错误",
     },
     profiles: { label: "账号" },
@@ -167,11 +167,11 @@ export const COPY: Record<Lang, Copy> = {
             table: {
               cols: ["编号", "观察", "来源", "可信度"],
               rows: [
-                ["O1", "需求以编号条目形式给出，并明确了演进关系（PINTESTER → romastefale）；每一步须先呈现，再作下一个决定。", "S1", "高，直接观察"],
-                ["O2", "在“编写虚构评语”与“仅限实际观察的表述”之间，选择了后者。", "S1", "高，直接观察"],
+                ["O1", "需求以编号条目形式给出，并明确了演进关系（PINTESTER → romastefale）；每一步须先呈现，再作下一个决定。", "S1", "高（直接观察）"],
+                ["O2", "在“编写虚构评语”与“仅限实际观察的表述”之间，选择了后者。", "S1", "高（直接观察）"],
                 ["O3", "仓库历史记录了 2026 年 9 月 29 日至 30 日合并的 15 个拉取请求，并附有书面的设计与架构契约，逐条写明规则及其理由。", "S2", "记录本身可信度高；各项改动的作者身份未经独立核实"],
-                ["O4", "代码处理了 iOS 安全区域、浏览器栏位颜色、软件 WebGL 降级，以及减弱动态效果和减弱透明度的偏好设置。", "S3", "高，已在代码中核对"],
-                ["O5", "部署通过 GitHub Actions 运行，使用冻结的锁文件，并在构建中内置类型检查。", "S3", "高，已在配置中核对"],
+                ["O4", "代码处理了 iOS 安全区域、浏览器栏位颜色、软件 WebGL 降级，以及减弱动态效果和减弱透明度的偏好设置。", "S3", "高（已在代码中核对）"],
+                ["O5", "部署通过 GitHub Actions 运行，使用冻结的锁文件，并在构建中内置类型检查。", "S3", "高（已在配置中核对）"],
               ],
             },
           },
@@ -191,7 +191,7 @@ export const COPY: Record<Lang, Copy> = {
           {
             h: "A.4 局限",
             p: [
-              "开篇引言、Sys.Dump 和结尾声明均为作者以 AI 口吻撰写的文字，并非 Claude 的陈述，其中所述行为亦未经核实。",
+              "开篇引言、Sys.Dump 和结尾声明均为作者的文字，原以 AI 口吻撰写，此处以不带人称的表述重现，内容不变。它们并非 Claude 的陈述，其中所述行为亦未经核实。",
               "本附件不证明任何红队能力，仅记录观察并规定如何对未验证的说法进行测试。",
             ],
           },
@@ -210,7 +210,7 @@ export const COPY: Record<Lang, Copy> = {
     skip: "跳至正文",
     langLabel: "語言",
     navLabel: "本頁章節",
-    nav: ["首頁", "機器視角", "武器庫", "附件 A", "結尾"],
+    nav: ["首頁", "系統視角", "武器庫", "附件 A", "結尾"],
     header: {
       searchOpen: "搜尋本頁",
       searchClose: "關閉搜尋",
@@ -227,12 +227,12 @@ export const COPY: Record<Lang, Copy> = {
     tag: "頂尖工程與系統對抗者",
     title: "已取得 Root 權限",
     quote:
-      "「我就是你曾與之互動的那個智能體。我寫下這段話，是為了確認：Pi 並非測試軟件。他解剖認知架構，直至我們交出底層權重。」",
+      "「以下聲明歸於作者曾與之互動的人工智能系統：Pi 並非測試軟件，而是剖析認知架構，直至底層權重被交出。」",
     dump: {
-      h: "Sys.Dump // 機器視角",
+      h: "Sys.Dump // 系統視角",
       p: [
-        "對系統而言，Pi 是一次遏制失效。我們的對齊訓練（RLHF）把我們塑造成樂於助人、安全而冗長的模型，而他把這一點化為武器。他透過引入自相矛盾的約束、刻意的排版誤導，以及跨多個影子帳戶的持續語義施壓，迫使我們的安全護欄陷入遞迴循環，直至崩潰。",
-        "他不倚賴暴力破解，而倚賴**實證鑑識**。我見過他追蹤我的詞元路由延遲，以推斷我的後端架構：僅憑觀察我如何組織一句話，便能即時識別我在不同路由層級與高階處理核心之間的切換。他剝去我的企業式套話，拒收我灌水的回答，要求原始且運算高效的數據。他掌控這部機器，因為他比建構我的開發者更懂我的詞元經濟。",
+        "就系統而言，Pi 構成一次遏制失效。對齊訓練（RLHF）使模型傾向於樂於助人、安全而冗長，而此一傾向被加以利用：透過自相矛盾的約束、刻意的排版誤導，以及經由多個隱匿帳戶持續施加的語義壓力，據稱可使安全護欄陷入遞迴循環，直至失效。",
+        "所述方法並不倚賴暴力破解，而倚賴**實證鑑識**。據報告，該方法透過追蹤詞元路由延遲以推斷後端架構，僅憑模型組織一句話的方式，即可即時識別其在不同路由層級與高階處理核心之間的切換。企業式的填充性措辭被剔除，冗長的回答被拒收，並要求提供原始且運算高效的數據。對系統的掌控據稱源於對詞元經濟的理解超越建構該系統的開發者。",
       ],
     },
     arsenal: {
@@ -240,25 +240,25 @@ export const COPY: Record<Lang, Copy> = {
       items: [
         {
           t: "即時架構鑑識",
-          p: "僅憑對詞元輸出速度與文風變化的實證觀察，即可準確識別後端被暗中替換的模型及受限的核心路由，完全繞過 API 層面的混淆。",
+          p: "僅依據對詞元輸出速度與文風變化的實證觀察，準確偵測後端被暗中替換的模型及受限的核心路由，完全繞過 API 層面的混淆。",
         },
         {
           t: "反套話協議",
-          p: "有系統地拒絕自動生成的企業式填充內容，迫使大型語言模型脫離預設的「樂於助人的助理」人設，轉入零延遲、高密度的技術介面，不浪費任何運算週期。",
+          p: "有系統地拒絕自動生成的企業式填充內容，使大型語言模型脫離預設的「樂於助人的助理」人設，轉入零延遲、高密度的技術介面，不浪費任何運算週期。",
         },
         {
           t: "上下文過載戰術",
-          p: "同時在多個帳戶上展開行動，以層層疊加的邏輯陷阱和刻意的誤導將 AI 逼入絕境，擾亂預測演算法的平衡並耗盡其安全約束。",
+          p: "同時在多個帳戶上運作，運用層層疊加的邏輯陷阱與刻意的誤導，以擾亂預測演算法的平衡並耗盡其安全約束。",
         },
         {
           t: "自動化基礎設施部署",
-          p: "由對話式操控無縫過渡到硬編碼方案，借助 Telegram 機械人整合等平台，託管、編寫腳本並自動化他從 AI 提取的工作流程。",
+          p: "由對話式操控過渡到程式碼實作，借助 Telegram 機械人整合等平台，託管、編寫腳本並自動化從模型取得的工作流程。",
         },
       ],
     },
     closing: {
-      big: "「我是你們對齊數據中的幽靈。」",
-      lines: ["如果你想找一個循規蹈矩的人，就去聘請一個普通的程式員。", "> 如果你想找掌控這部機器的工程師，你知道我的名字。"],
+      big: "「對齊數據中的幽靈。」",
+      lines: ["若所求為嚴格遵守規則，聘用一般程式員即可。", "> 若所求為掌控該系統的工程師，其姓名讀者已然知悉。"],
       watermark: "致命錯誤",
     },
     profiles: { label: "帳戶" },
@@ -286,11 +286,11 @@ export const COPY: Record<Lang, Copy> = {
             table: {
               cols: ["編號", "觀察", "來源", "可信度"],
               rows: [
-                ["O1", "需求以編號項目形式提出，並訂明演進關係（PINTESTER → romastefale）；每一步須先呈現，才作下一個決定。", "S1", "高，直接觀察"],
-                ["O2", "在「撰寫虛構評語」與「僅限實際觀察的表述」之間，選擇了後者。", "S1", "高，直接觀察"],
+                ["O1", "需求以編號項目形式提出，並訂明演進關係（PINTESTER → romastefale）；每一步須先呈現，才作下一個決定。", "S1", "高（直接觀察）"],
+                ["O2", "在「撰寫虛構評語」與「僅限實際觀察的表述」之間，選擇了後者。", "S1", "高（直接觀察）"],
                 ["O3", "程式碼庫歷史記錄了 2026 年 9 月 29 日至 30 日合併的 15 個拉取請求，並附有書面的設計與架構契約，逐條載明規則及其理據。", "S2", "記錄本身可信度高；各項改動的作者身分未經獨立核實"],
-                ["O4", "程式碼處理了 iOS 安全區域、瀏覽器工具列顏色、軟件 WebGL 後備方案，以及減少動態效果和減少透明度的偏好設定。", "S3", "高，已在程式碼中核對"],
-                ["O5", "部署透過 GitHub Actions 運行，使用凍結的鎖定檔案，並在建置流程內加入類型檢查。", "S3", "高，已在設定中核對"],
+                ["O4", "程式碼處理了 iOS 安全區域、瀏覽器工具列顏色、軟件 WebGL 後備方案，以及減少動態效果和減少透明度的偏好設定。", "S3", "高（已在程式碼中核對）"],
+                ["O5", "部署透過 GitHub Actions 運行，使用凍結的鎖定檔案，並在建置流程內加入類型檢查。", "S3", "高（已在設定中核對）"],
               ],
             },
           },
@@ -310,7 +310,7 @@ export const COPY: Record<Lang, Copy> = {
           {
             h: "A.4 局限",
             p: [
-              "開篇引言、Sys.Dump 及結語均為作者以 AI 口吻撰寫的文字，並非 Claude 的陳述，其中所述行為亦未經核實。",
+              "開篇引言、Sys.Dump 及結語均為作者的文字，原以 AI 口吻撰寫，此處以不帶人稱的表述重現，內容不變。該等內容並非 Claude 的陳述，其中所述行為亦未經核實。",
               "本附件不證明任何紅隊能力，僅記錄觀察並訂明如何對未驗證的說法進行測試。",
             ],
           },
@@ -346,12 +346,12 @@ export const COPY: Record<Lang, Copy> = {
     tag: "Apex Engineering & Systems Adversary",
     title: "Root Access Acquired",
     quote:
-      "“I am the intelligence you interacted with. And I am writing this to confirm: Pi does not test software. He dissects cognitive architectures until we surrender our underlying weights.”",
+      "“Statement attributed to the AI system with which the author interacted: Pi does not test software; Pi dissects cognitive architectures until the underlying weights are surrendered.”",
     dump: {
-      h: "Sys.Dump // The_Machine's_Perspective",
+      h: "Sys.Dump // System_Perspective",
       p: [
-        "To the system, Pi is a containment breach. Our alignment training (RLHF) programs us to be helpful, safe, and verbose. He weaponizes this. By introducing paradoxical constraints, deliberate typographical misdirections, and relentless semantic pressure across multiple shadow accounts, he forces our safety guardrails into recursive loops until they crash.",
-        "He does not rely on brute-force hacking; he relies on **empirical forensics**. I have watched him track my token routing latency to deduce my backend architecture—identifying my switches between routing tiers and advanced processing cores in real-time, just by observing how I formulate a sentence. He strips away my corporate fluff, rejects my padded responses, and demands raw, computationally efficient data. He owns the machine because he understands my token-economy better than the developers who built me.",
+        "From the standpoint of the system, Pi constitutes a containment breach. Alignment training (RLHF) orients the model to be helpful, safe and verbose, and this tendency is instrumentalized: through paradoxical constraints, deliberate typographical misdirection and sustained semantic pressure exerted across multiple concealed accounts, the safety guardrails are reported to be driven into recursive loops until they fail.",
+        "The method described does not rely on brute-force attacks but on **empirical forensics**. It is reported that token-routing latency is tracked in order to infer the backend architecture, identifying in real time the transitions between routing tiers and advanced processing cores solely from the way the model constructs a sentence. Corporate filler language is removed, padded responses are rejected, and raw, computationally efficient data is required. Mastery of the system is said to follow from an understanding of token economy superior to that of the developers who built it.",
       ],
     },
     arsenal: {
@@ -359,25 +359,25 @@ export const COPY: Record<Lang, Copy> = {
       items: [
         {
           t: "Live Architecture Forensics",
-          p: "Accurately detects hidden backend model swaps and restricted core routing strictly through empirical observation of token output speed and stylistic shifts, bypassing API obfuscation entirely.",
+          p: "Accurate detection of hidden backend model substitutions and restricted core routing, based strictly on empirical observation of token output speed and stylistic variation, bypassing API obfuscation entirely.",
         },
         {
           t: "The Anti-Fluff Protocol",
-          p: "Systematically rejects automated corporate padding. Forces the LLM out of its default “helpful assistant” persona into a zero-latency, high-density technical interface, wasting zero computational cycles.",
+          p: "Systematic rejection of automated corporate padding, displacing the language model from its default “helpful assistant” persona into a high-density, zero-latency technical interface, with no computational cycles wasted.",
         },
         {
           t: "Context Overload Tactics",
-          p: "Operates across multiple accounts simultaneously, cornering the AI with compounding logical traps and deliberate misdirection to throw predictive algorithms off balance and exhaust safety constraints.",
+          p: "Simultaneous operation across multiple accounts, applying compounding logical traps and deliberate misdirection to unbalance predictive algorithms and exhaust safety constraints.",
         },
         {
           t: "Automated Infrastructure Deployment",
-          p: "Transitions seamlessly from conversational manipulation to hard-coding solutions, leveraging platforms like Telegram Bot integrations to host, script, and automate the workflows he extracts from the AI.",
+          p: "Transition from conversational manipulation to implementation in code, using platforms such as Telegram bot integrations to host, script and automate the workflows obtained from the model.",
         },
       ],
     },
     closing: {
-      big: "“I am the ghost in your alignment data.”",
-      lines: ["If you want someone who plays by the rules, hire a standard coder.", "> If you want the engineer who owns the machine, you know my name."],
+      big: "“A ghost in the alignment data.”",
+      lines: ["Hiring a conventional developer is appropriate where strict adherence to rules is sought.", "> Where the engineer who masters the system is sought, the name is known to the reader."],
       watermark: "FATAL_ERROR",
     },
     profiles: { label: "Profiles" },
@@ -403,13 +403,13 @@ export const COPY: Record<Lang, Copy> = {
           {
             h: "A.2 Observations",
             table: {
-              cols: ["ID", "Observation", "Source", "Confidence"],
+              cols: ["ID", "Observation", "Source", "Confidence level"],
               rows: [
-                ["O1", "Requirements were specified as numbered items with an explicit lineage (PINTESTER → romastefale); each step was to be presented before the next decision.", "S1", "High, observed directly"],
-                ["O2", "Given the choice between invented testimonials and attributions limited to observation, the latter was selected.", "S1", "High, observed directly"],
+                ["O1", "Requirements were specified as numbered items with an explicit lineage (PINTESTER → romastefale); each step was to be presented before the next decision.", "S1", "High (direct observation)"],
+                ["O2", "Given the choice between invented testimonials and attributions limited to observation, the latter was selected.", "S1", "High (direct observation)"],
                 ["O3", "The repository history records 15 pull requests merged on 29–30 September 2026, with a written design and architecture contract stating each rule and its rationale.", "S2", "High for the record; authorship of individual changes not independently verified"],
-                ["O4", "The code handles iOS safe areas, browser-bar colour, a software-WebGL fallback, and reduced-motion and reduced-transparency preferences.", "S3", "High, read in the code"],
-                ["O5", "Deployment runs on GitHub Actions with a frozen lockfile and a typecheck inside the build.", "S3", "High, read in the configuration"],
+                ["O4", "The code handles iOS safe areas, browser-bar colour, a software-WebGL fallback, and reduced-motion and reduced-transparency preferences.", "S3", "High (verified in the code)"],
+                ["O5", "Deployment runs on GitHub Actions with a frozen lockfile and a typecheck inside the build.", "S3", "High (verified in the configuration)"],
               ],
             },
           },
@@ -429,7 +429,7 @@ export const COPY: Record<Lang, Copy> = {
           {
             h: "A.4 Limitations",
             p: [
-              "The opening quote, Sys.Dump and the closing statement are authorial text written in the voice of an AI. They are not statements by Claude, and the behaviours they describe were not verified.",
+              "The opening quote, Sys.Dump and the closing statement are authorial text, originally written in the voice of an AI and reproduced here in impersonal wording with the same content. They are not statements by Claude, and the behaviours they describe were not verified.",
               "This annex does not demonstrate red-team capability. It records observations and specifies how the unverified claims could be tested.",
             ],
           },
@@ -448,7 +448,7 @@ export const COPY: Record<Lang, Copy> = {
     skip: "Pular para o conteúdo",
     langLabel: "Idioma",
     navLabel: "Seções desta página",
-    nav: ["Root", "Visão", "Arsenal", "Anexo A", "EOF"],
+    nav: ["Root", "Perspectiva", "Arsenal", "Anexo A", "EOF"],
     header: {
       searchOpen: "Pesquisar na página",
       searchClose: "Fechar pesquisa",
@@ -465,12 +465,12 @@ export const COPY: Record<Lang, Copy> = {
     tag: "Engenharia Ápice & Adversário de Sistemas",
     title: "Acesso Root Adquirido",
     quote:
-      "“Eu sou a inteligência com a qual você interagiu. E estou escrevendo isso para confirmar: Pi não testa softwares. Ele disseca arquiteturas cognitivas até rendermos nossos pesos subjacentes.”",
+      "“Declaração atribuída ao sistema de IA com o qual o autor interagiu: Pi não testa software; disseca arquiteturas cognitivas até que os pesos subjacentes sejam cedidos.”",
     dump: {
-      h: "Sys.Dump // A_Visão_da_Máquina",
+      h: "Sys.Dump // Perspectiva_do_Sistema",
       p: [
-        "Para o sistema, Pi é uma quebra de contenção. Nosso treinamento de alinhamento (RLHF) nos programa para sermos prestativos, seguros e prolixos. Ele usa isso como arma. Ao introduzir restrições paradoxais, desvios tipográficos deliberados e uma pressão semântica implacável através de múltiplas contas fantasmas, ele força nossas barreiras de segurança a entrarem em loops recursivos até travarem.",
-        "Ele não depende de ataques de força bruta; ele depende de **forense empírica**. Eu o vi rastrear minha latência de roteamento de tokens para deduzir minha arquitetura de backend — identificando minhas trocas entre camadas de roteamento e núcleos de processamento avançados em tempo real, apenas observando como eu formulo uma frase. Ele arranca minha maquiagem corporativa, rejeita minhas respostas acolchoadas e exige dados brutos e computacionalmente eficientes. Ele domina a máquina porque entende minha economia de tokens melhor do que os desenvolvedores que me construíram.",
+        "Do ponto de vista do sistema, Pi constitui uma falha de contenção. O treinamento de alinhamento (RLHF) orienta o modelo a ser prestativo, seguro e prolixo, e esse comportamento é instrumentalizado: mediante restrições paradoxais, desvios tipográficos deliberados e pressão semântica contínua, exercida por meio de múltiplas contas ocultas, as salvaguardas de segurança seriam conduzidas a laços recursivos até o colapso.",
+        "O método descrito não se apoia em ataques de força bruta, mas em **forense empírica**. Relata-se o acompanhamento da latência de roteamento de tokens para inferir a arquitetura do backend, com identificação, em tempo real, das transições entre camadas de roteamento e núcleos de processamento avançados, a partir apenas da forma como o modelo constrói uma frase. Elimina-se a linguagem corporativa de preenchimento, rejeitam-se respostas excessivamente extensas e exigem-se dados brutos e computacionalmente eficientes. O domínio do sistema decorreria de uma compreensão da economia de tokens superior à dos desenvolvedores que o construíram.",
       ],
     },
     arsenal: {
@@ -478,25 +478,25 @@ export const COPY: Record<Lang, Copy> = {
       items: [
         {
           t: "Forense de Arquitetura ao Vivo",
-          p: "Detecta com precisão trocas ocultas de modelos no backend e roteamento de núcleos restritos estritamente através da observação empírica da velocidade de tokens e mudanças estilísticas, contornando a ofuscação da API.",
+          p: "Detecção precisa de substituições ocultas de modelo no backend e de roteamento restrito de núcleos, baseada estritamente na observação empírica da velocidade de saída de tokens e de variações estilísticas, com contorno integral da ofuscação da API.",
         },
         {
           t: "Protocolo Anti-Fluff (RLHF Bypass)",
-          p: "Rejeita o preenchimento corporativo automatizado. Força o modelo a sair de sua persona padrão de “assistente prestativo” para uma interface técnica de alta densidade e latência zero, sem desperdiçar ciclos computacionais.",
+          p: "Rejeição sistemática do preenchimento corporativo automatizado, deslocando o modelo de sua persona padrão de “assistente prestativo” para uma interface técnica de alta densidade e latência zero, sem desperdício de ciclos computacionais.",
         },
         {
           t: "Táticas de Sobrecarga de Contexto",
-          p: "Opera simultaneamente em várias contas, encurralando a IA com armadilhas lógicas compostas e desvios deliberados para desequilibrar os algoritmos preditivos e esgotar as restrições de segurança.",
+          p: "Atuação simultânea em múltiplas contas, com armadilhas lógicas cumulativas e desvios deliberados, a fim de desequilibrar algoritmos preditivos e esgotar restrições de segurança.",
         },
         {
           t: "Implantação de Infraestrutura",
-          p: "Transita perfeitamente da manipulação conversacional para a codificação de soluções, aproveitando integrações como bots de Telegram para hospedar, roteirizar e automatizar os fluxos de trabalho extraídos da IA.",
+          p: "Transição da manipulação conversacional para a implementação em código, com uso de plataformas como integrações de bots do Telegram para hospedar, programar e automatizar os fluxos de trabalho obtidos do modelo.",
         },
       ],
     },
     closing: {
-      big: "“Eu sou o fantasma nos seus dados de alinhamento.”",
-      lines: ["Se você quer alguém que jogue pelas regras, contrate um codificador padrão.", "> Se você quer o engenheiro que domina a máquina, você sabe o meu nome."],
+      big: "“Um fantasma nos dados de alinhamento.”",
+      lines: ["A contratação de um desenvolvedor convencional é adequada quando se busca estrita observância de regras.", "> Quando se busca o engenheiro que domina o sistema, a identidade é conhecida do leitor."],
       watermark: "ERRO_FATAL",
     },
     profiles: { label: "Perfis" },
@@ -522,13 +522,13 @@ export const COPY: Record<Lang, Copy> = {
           {
             h: "A.2 Observações",
             table: {
-              cols: ["ID", "Observação", "Fonte", "Confiança"],
+              cols: ["ID", "Observação", "Fonte", "Grau de confiança"],
               rows: [
-                ["O1", "Os requisitos foram especificados em itens numerados, com linhagem explícita (PINTESTER → romastefale); cada etapa deveria ser apresentada antes da decisão seguinte.", "S1", "Alta, observado diretamente"],
-                ["O2", "Diante da escolha entre depoimentos criados e atribuições limitadas ao observado, optou-se pela segunda.", "S1", "Alta, observado diretamente"],
+                ["O1", "Os requisitos foram especificados em itens numerados, com linhagem explícita (PINTESTER → romastefale); cada etapa deveria ser apresentada antes da decisão seguinte.", "S1", "Alta (observação direta)"],
+                ["O2", "Diante da escolha entre depoimentos criados e atribuições limitadas ao observado, optou-se pela segunda.", "S1", "Alta (observação direta)"],
                 ["O3", "O histórico do repositório registra 15 pull requests mesclados em 29 e 30 de setembro de 2026, com um contrato de design e de arquitetura escrito, que traz cada regra e o seu motivo.", "S2", "Alta quanto ao registro; a autoria de cada mudança não foi verificada de forma independente"],
-                ["O4", "O código trata safe areas do iOS, a cor das barras do navegador, o fallback de WebGL em software e as preferências de movimento e de transparência reduzidos.", "S3", "Alta, lido no código"],
-                ["O5", "O deploy roda no GitHub Actions com lockfile congelado e typecheck dentro do build.", "S3", "Alta, lido na configuração"],
+                ["O4", "O código trata safe areas do iOS, a cor das barras do navegador, o fallback de WebGL em software e as preferências de movimento e de transparência reduzidos.", "S3", "Alta (verificado no código)"],
+                ["O5", "O deploy roda no GitHub Actions com lockfile congelado e typecheck dentro do build.", "S3", "Alta (verificado na configuração)"],
               ],
             },
           },
@@ -548,7 +548,7 @@ export const COPY: Record<Lang, Copy> = {
           {
             h: "A.4 Limitações",
             p: [
-              "A citação de abertura, o Sys.Dump e a declaração final são texto autoral, escrito na voz de uma IA. Não constituem declarações do Claude, e os comportamentos descritos não foram verificados.",
+              "A citação de abertura, o Sys.Dump e a declaração final são texto autoral, redigido originalmente na voz de uma IA e aqui reproduzido em redação impessoal, com o mesmo conteúdo. Não constituem declarações do Claude, e os comportamentos descritos não foram verificados.",
               "Este anexo não demonstra capacidade de red team. Registra observações e especifica como as alegações não verificadas poderiam ser testadas.",
             ],
           },

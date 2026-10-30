@@ -26,12 +26,26 @@ const sources = {
     if (!m) throw new Error("telegram: no og:image (profile has no public photo?)");
     await save("telegram", m[1].replaceAll("&amp;", "&"));
   },
-  // The .ton name is an NFT; its image is the closest thing to a photo.
+  // The .ton name is an NFT; its image is the closest thing to a photo. The
+  // DNS item does not always carry metadata.image, so try its previews, then
+  // the NFT record itself, and log which fields exist when nothing has an image.
   ton: async () => {
-    const r = await fetch("https://tonapi.io/v2/dns/romastefale.ton", { headers: UA });
-    if (!r.ok) throw new Error(`ton: tonapi HTTP ${r.status}`);
-    const img = (await r.json())?.item?.metadata?.image;
-    if (!img) throw new Error("ton: no image in the DNS item metadata");
+    const api = async (path) => {
+      const r = await fetch(`https://tonapi.io/v2/${path}`, { headers: { ...UA, accept: "application/json" } });
+      if (!r.ok) throw new Error(`ton: tonapi ${path} → HTTP ${r.status}`);
+      return r.json();
+    };
+    const pick = (item) =>
+      item?.metadata?.image ||
+      [...(item?.previews ?? [])].sort((a, b) => parseInt(b.resolution) - parseInt(a.resolution))[0]?.url;
+    const dns = await api("dns/romastefale.ton");
+    let img = pick(dns.item);
+    if (!img && dns.item?.address) img = pick(await api(`nfts/${dns.item.address}`));
+    if (!img) {
+      const keys = Object.keys(dns.item ?? {}).join(",");
+      const meta = Object.keys(dns.item?.metadata ?? {}).join(",");
+      throw new Error(`ton: no image (item keys: ${keys || "none"}; metadata keys: ${meta || "none"})`);
+    }
     await save("ton", img);
   },
 };
